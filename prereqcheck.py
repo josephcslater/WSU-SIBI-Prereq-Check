@@ -139,26 +139,82 @@ majordict = {"ME4910": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"
              "ME2700": ['Engineering - IECS', 'Materials Sci + Egr - BSMSE', 'Materials Sci + Egr - IECS',
                         'Materials Sci + Egr - Pre',
                         'Mathematics - BS', 'Mech Engineering - BSME', 'Mech Engineering - IECS',
-                        'Mech Engineering - Pre']}
+                        'Mech Engineering - Pre'],
+             "ME3120": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3210": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3310": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3320": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3350": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3360": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3600": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3610": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3750": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3760": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3150": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4010": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4080": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4120": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4140": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4150": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4160": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4180": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4190": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4210": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4220": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4240": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4250": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4260": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4330": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4340": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4350": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4360": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4430": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4440": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4490": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4520": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4530": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4540": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4550": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4560": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4570": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4580": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4590": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4610": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4620": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4680": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4700": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4720": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4730": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4740": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4750": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4860": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME3870": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+             "ME4880": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"]}
+
+text_output = False
+
+
+
+# Hard coded toggling ot text output.
+def tprint(string, output = False):
+    #print(output)
+    if output:
+        print(string)
 
 # This co-or-prequisite is hard-coded in passed_class
 co_or_preqdict = {"ME2600": ("ME2700")}
-
 
 def isC(grade):
     answer = grade == 'A' or grade == 'B' or grade == 'C'
     return answer
 
-
 def isD(grade):
     answer = grade == 'A' or grade == 'B' or grade == 'C' or grade == 'D'
     return answer
 
-
 def ispass(grade):
     answer = grade == 'A' or grade == 'B' or grade == 'C' or grade == 'D'
     return answer
-
 
 def isbetterthan(grade_needed, grade_received):
     if grade_needed == 'C':
@@ -170,9 +226,7 @@ def isbetterthan(grade_needed, grade_received):
         answer = 3
     return answer
 
-
 # Check if single course was passed
-
 
 def passed_class(class_name, classes_taken, course_name):
     '''
@@ -277,57 +331,57 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             prereqs, data["Pre_req_dic"].loc[student], course_name)
         if satisfied is False:
             data.loc[student, "Pre_req_status"] = "Missing prereqs"
-            print('Begin {}'.format(student))
+            tprint('Begin {}'.format(student))
             if student in no_transfer_data:
-                print(
+                tprint(
                     'No transfer data for {}. ************************'.format(student))
 
-            print(student)
-            print('Section number {}'.format(
+            tprint(student)
+            tprint('Section number {}'.format(
                 data["CourseSectionNumber"].loc[student][:-1]))
 
             # print(student)
-            print('Name: {}'.format(data.loc[student, ["Name"]].values[0]))
-            print('Email: {}'.format(data.loc[student, ["Email"]].values[0]))
+            tprint('Name: {}'.format(data.loc[student, ["Name"]].values[0]))
+            tprint('Email: {}'.format(data.loc[student, ["Email"]].values[0]))
             phone_number = str(data.loc[student, ["PhoneNumber"]].values[0])
             phone_number = '(' + phone_number[:3] + ')' + \
                            phone_number[3:6] + '-' + phone_number[6:]
-            print('Phone number: {}'.format(phone_number))
-            print('Program description: {}'.format(
+            tprint('Phone number: {}'.format(phone_number))
+            tprint('Program description: {}'.format(
                 data.loc[student, ["ProgramDescription"]].values[0]))
             # is "nan":
             if isinstance(data.loc[student, ["PRIMARY_ADVISOR_NAME_LFMI"]].values[0], float):
-                print('Advisor name: {}\n'.format("No Advisor On Record"))
+                tprint('Advisor name: {}\n'.format("No Advisor On Record"))
             else:
-                print('Advisor name: {}\n'.format(
+                tprint('Advisor name: {}\n'.format(
                     data.loc[student, ["PRIMARY_ADVISOR_NAME_LFMI"]].values[0]))
-            print(data.loc[student].iloc[6:-1])
-            print('Has:\n{}'.format(
+            tprint(data.loc[student].iloc[6:-1])
+            tprint('Has:\n{}'.format(
                 data.loc[student, ["Pre_req_dic"]].values[0]))
             # data.loc[student,'Has'] = data.loc[student,["Pre_req_dic"]].values[0]
-            print('Needs any of the following combinations:')
+            tprint('Needs any of the following combinations:')
             allprereqs = ''
             if type(prereqs) is tuple:
-                print('growing list of prerequisites')
+                tprint('growing list of prerequisites')
                 for idx, set in enumerate(prereqs):
                     allprereqs = allprereqs + set + ', '
-                    print('idx %', idx)
-                    print('set %', set)
+                    tprint('idx %', idx)
+                    tprint('set %', set)
                     prereqs[idx] = 'and '.join([str(x) for x in prereqs[idx]])
-                    print(set)
+                    tprint(set)
                 allprereqs = allprereqs[:-2]
                 allprereqs = ', or'.join([str(x) for x in prereqs])
             else:
-                print(prereqs)
+                tprint(prereqs)
                 allprereqs = prereqs
                 allprereqs = ', '.join([str(x) for x in allprereqs])
-            print(allprereqs)
+            tprint(allprereqs)
             # Put needs in excel spreadsheet
             # data.loc[student,'Needs'] = allprereqs
 
             email_list = email_list + ';' + \
                          data.loc[student, ["Email"]].values[0]
-            print('=====================================================\n\n')
+            tprint('=====================================================\n\n')
     # print(email_list[1:])
     return data
 
@@ -385,12 +439,12 @@ def append_transfer(data, student_list):
             transfer_data = pd.read_excel(filename, index_col=0, skip_footer=1)
             break
         except IOError:
-            print("Oops!  Cannot find {}".format(filename))
+            tprint("Oops!  Cannot find {}".format(filename))
             filename = input("Try using the full path: ")
-    print('\n\n*****************************************************************************')
-    print("Transfer prerequisite file last modified: %s" %
+    tprint('\n\n*****************************************************************************')
+    tprint("Transfer prerequisite file last modified: %s" %
           time.ctime(os.path.getmtime(filename)))
-    print('*****************************************************************************\n\n')
+    tprint('*****************************************************************************\n\n')
 
     transfer_data = pd.read_excel(filename, index_col=0, skip_footer=1)
     all_preqs = []
@@ -430,12 +484,15 @@ def check_majors(major_requirement, data, student_list):
             print('{} ({}) major is {}. Must be {}.\n'.format(data["Name"].loc[student], data[
                 "Email"].loc[student], data["ProgramDescription"].loc[student], major_requirement))
             data.loc[student, "Major"] = "Wrong major"
-    print('That\'s it!')
+        print('That\'s it!')
     return data
 
 
 def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     data, student_list, course_name = read_prereq_report(filename)
+    print(filename)
+    file_path =  filename[:filename.rfind('/')+1]
+    print(file_path)
     prereqs = prereqdict[course_name]
     data, no_transfer_data = append_transfer(data, student_list)
     data = check_class(course_name, student_list,
@@ -453,11 +510,35 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
         cols = cols[:1] + cols[-1:] + cols[1:-1]
         data = data[cols]
 
-    data.sort_values(by=('PRIMARY_ADVISOR_NAME_LFMI'))
-    writer = pd.ExcelWriter(course_name + '_report.xlsx')
-    data.to_excel(writer, 'Checks')
+    data = data.sort_values(by=('PRIMARY_ADVISOR_NAME_LFMI'))
+    print(data['Email'][0])
+
+    email_list = ''
+    for email in data['Email']:
+        email_list += email
+        email_list += '; '
+    email_list = email_list[:-1]
+    print(email_list)
+    d = {'Name': pd.Series('', index=['E List'])}
+
+
+    df2 = pd.DataFrame(d)
+    original_columns = list(data)
+    data = data.append(df2)
+    data = data[original_columns]
+    #data['Name','E List'] = 'x'
+    data.at['E List', 'Name'] = email_list
+    #data.iat[18, 0] = 7
+    writer = pd.ExcelWriter(file_path + course_name + '_report.xlsx',  engine='xlsxwriter')
+    data.to_excel(writer, sheet_name = 'Checks')
+    #writer.sheets['Checks'].column_dimensions['Name'].width = 15
+    #help(writer.sheets['Checks'].set_column)
+    #writer.sheets['Checks'].set_column('Name','Name',15)
+    #writer.column_dimensions['Name'].width = 15
     writer.save()
-    print('\a')
+    print(file_path + course_name + '_report.xlsx written.')
+    tprint('\a')
+    print('end')
     return data
 
 
@@ -475,13 +556,13 @@ for file in sys.argv:
     # print(file[-2:])
     if ".py" in file:
         # print(file[-2:])
-        print('\n')
+        tprint('\n')
         # print("Ignoring {}".format(file))
     elif "Student_prerequisite_data.xlsx" in file or '~' in file:
-        print('\n')
+        tprint('\n')
     else:
-        print(file)
-        print('**************')
+        tprint(file)
+        tprint('**************')
         data = check_report(file, prereqdict, majordict)
 
         # print(data)

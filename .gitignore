@@ -1,6 +1,9 @@
 # FRPA Data
 *.xlsx
 *.xls
+JupyterNotebooks/*.xlsx
+JupyterNotebooks/*.xlsx
+
 
 .idea/workspace.xml
 
