@@ -56,11 +56,11 @@ prereqdict = {"ME1020": ("EGR1010"),
               "ME2700": (["CHM1210", "PHY2400"]),
               "ME3120": ("ME1020", "ME2120"),  # Verified Aug-15-2016
               "ME3210": (["EE2010", "ME2210", "ME3120", "ME3350", "MTH2350"]),  # Verified Aug-16-2016
-              "ME3310": (["EGR1010", "MTH2310", "ME2120"]),
+              "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
               "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
               "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
-              "ME3360": (["ME1020", "ME3350", "MTH2350"]),  # Verified Aug-15-2016
-              "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"]),
+              "ME3360": (["ME3350", "MTH2350"]),  # Verified Aug-15-2016
+              "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350", "ME3600c"]),
               "ME3750": ("ME2700"),  # Verified Aug-15-2016
               "ME3760": ("ME3750"),  # Verified Aug-15-2016
               "ME4010": (["ME3360", "ME3210"]),  # Verified Aug-15-2016
@@ -97,7 +97,7 @@ prereqdict = {"ME1020": ("EGR1010"),
               "ME4700": (["ME2700", "MTH2320", "MTH2350"]),
               "ME4720": ("ME2700"),  # Verified Aug-16-2016
               "ME4730": ("ME2700"),  # Verified Aug-16-2016
-              "ME4740": (["ME2700", "ME3120", "ME4620"]),
+              "ME4740": (["ME2700", "ME3120", "ME4620c"]),
               "ME4750": (["ME2600", "ME2700"]),  # Verified Aug-16-2016
               "ME4770": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
               "ME4820": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
@@ -342,7 +342,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
             # print(student)
             tprint('Name: {}'.format(data.loc[student, ["Name"]].values[0]))
-            tprint('Email: {}'.format(data.loc[student, ["Email"]].values[0]))
+            tprint('Email: {}'.format(data.loc[student, ["EmailAddress"]].values[0]))
             phone_number = str(data.loc[student, ["PhoneNumber"]].values[0])
             phone_number = '(' + phone_number[:3] + ')' + \
                            phone_number[3:6] + '-' + phone_number[6:]
@@ -350,25 +350,37 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             tprint('Program description: {}'.format(
                 data.loc[student, ["ProgramDescription"]].values[0]))
             # is "nan":
-            if isinstance(data.loc[student, ["PRIMARY_ADVISOR_NAME_LFMI"]].values[0], float):
+            if isinstance(data.loc[student, ["PrimaryAdvisorNameLFMI"]].values[0], float):
                 tprint('Advisor name: {}\n'.format("No Advisor On Record"))
             else:
                 tprint('Advisor name: {}\n'.format(
-                    data.loc[student, ["PRIMARY_ADVISOR_NAME_LFMI"]].values[0]))
+                    data.loc[student, ["PrimaryAdvisorNameLFMI"]].values[0]))
             tprint(data.loc[student].iloc[6:-1])
             tprint('Has:\n{}'.format(
                 data.loc[student, ["Pre_req_dic"]].values[0]))
             # data.loc[student,'Has'] = data.loc[student,["Pre_req_dic"]].values[0]
             tprint('Needs any of the following combinations:')
             allprereqs = ''
+            print('prereqs')
+            print(prereqs)
             if type(prereqs) is tuple:
                 tprint('growing list of prerequisites')
-                for idx, set in enumerate(prereqs):
-                    allprereqs = allprereqs + set + ', '
+                for idx, set_ in enumerate(prereqs):
+                    print('all prereqs')
+                    print(allprereqs)
+                    print('set_')
+                    print(set_)
+                    print(type(set_))
+                    print(type(str(set_)))
+                    if type(set_) is list:
+                        for indiv_course in set_:
+                            allprereqs = allprereqs + indiv_course + ', '
+                        else:
+                            allprereqs = allprereqs + str(set_) + ', '
                     tprint('idx %', idx)
-                    tprint('set %', set)
-                    prereqs[idx] = 'and '.join([str(x) for x in prereqs[idx]])
-                    tprint(set)
+                    tprint('set_ %', set_)
+                    # prereqs[idx] = 'and '.join([str(x) for x in prereqs[idx]])
+                    tprint(set_)
                 allprereqs = allprereqs[:-2]
                 allprereqs = ', or'.join([str(x) for x in prereqs])
             else:
@@ -380,7 +392,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             # data.loc[student,'Needs'] = allprereqs
 
             email_list = email_list + ';' + \
-                         data.loc[student, ["Email"]].values[0]
+                         data.loc[student, ["EmailAddress"]].values[0]
             tprint('=====================================================\n\n')
     # print(email_list[1:])
     return data
@@ -388,13 +400,13 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
 def read_prereq_report(filename):
     data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
-                         sheetname="Page1_1", converters={'PhoneNumber': str})
+                         sheetname="Page1", converters={'PhoneNumber': str})
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
 
     num_prereqs = 0
-    keep_cols = ['Name', 'Email', 'PhoneNumber', 'ProgramDescription',
-                 'PRIMARY_ADVISOR_NAME_LFMI', 'CourseSectionNumber']
+    keep_cols = ['Name', 'EmailAddress', 'PhoneNumber', 'ProgramDescription',
+                 'PrimaryAdvisorNameLFMI', 'CourseSectionNumber']
     base_cols = len(keep_cols)
     for i, c_name in enumerate(data.columns):
         if c_name.find("Requisite") > 0:
@@ -476,21 +488,23 @@ def append_transfer(data, student_list):
 
 def check_majors(major_requirement, data, student_list):
     print('\n\nMajor Checking\n-----------------------------------------\n\n')
+    data.loc[1, 'Major'] = "Wrong Major"
     for student in student_list:
         # print(student)
         # print(data)
         # print(data["ProgramDescription"].loc[student])
         if data.loc[student, "ProgramDescription"] not in major_requirement:
             print('{} ({}) major is {}. Must be {}.\n'.format(data["Name"].loc[student], data[
-                "Email"].loc[student], data["ProgramDescription"].loc[student], major_requirement))
+                "EmailAddress"].loc[student], data["ProgramDescription"].loc[student], major_requirement))
             data.loc[student, "Major"] = "Wrong major"
-        print('That\'s it!')
+        #print('That\'s it!')
     return data
 
 
 def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     data, student_list, course_name = read_prereq_report(filename)
     print(filename)
+    # print(data)
     file_path =  filename[:filename.rfind('/')+1]
     print(file_path)
     prereqs = prereqdict[course_name]
@@ -499,7 +513,12 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
                        data, prereqs, no_transfer_data)
     if course_name in majordict:
         data = check_majors(majordict[course_name], data, student_list)
-        data = data[data.Major.notnull() and data.Pre_req_status.notnull()]
+        #print(data[data.Pre_req_status.notnull()])
+        #print(data[data.Major.notnull()])
+        try:
+            data = data[data.Major.notnull() and data.Pre_req_status.notnull()]
+        except ValueError:
+            data = data[data.Pre_req_status.notnull()]
         cols = data.columns.tolist()
         cols = cols[:1] + cols[-2:] + cols[1:-2]
         data = data[cols]
@@ -510,27 +529,61 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
         cols = cols[:1] + cols[-1:] + cols[1:-1]
         data = data[cols]
 
-    data = data.sort_values(by=('PRIMARY_ADVISOR_NAME_LFMI'))
-    print(data['Email'][0])
+    data = data.sort_values(by=('PrimaryAdvisorNameLFMI'))
+    # print(data['EmailAddress'][0])
 
     email_list = ''
-    for email in data['Email']:
+    for email in data['EmailAddress']:
         email_list += email
         email_list += '; '
     email_list = email_list[:-1]
     print(email_list)
     d = {'Name': pd.Series('', index=['E List'])}
 
-
+#   Add email list to bottom of sheet.
     df2 = pd.DataFrame(d)
     original_columns = list(data)
     data = data.append(df2)
     data = data[original_columns]
-    #data['Name','E List'] = 'x'
     data.at['E List', 'Name'] = email_list
+
     #data.iat[18, 0] = 7
     writer = pd.ExcelWriter(file_path + course_name + '_report.xlsx',  engine='xlsxwriter')
-    data.to_excel(writer, sheet_name = 'Checks')
+    data.to_excel(writer, sheet_name = 'Both Campuses')
+
+
+#   Create Dayton Sheet
+    data_Dayton = data[data['CourseSectionNumber'].str.contains('W')==False]
+    email_list = ''
+    for email in data_Dayton['EmailAddress']:
+        email_list += email
+        email_list += '; '
+    email_list = email_list[:-1]
+#   Add email list to bottom of sheet.
+    data_Dayton = data_Dayton.append(df2)
+    data_Dayton = data_Dayton[original_columns]
+    data_Dayton.at['E List', 'Name'] = email_list
+    data_Dayton.to_excel(writer, sheet_name = 'Dayton Campus')
+
+
+
+#   Create Lake Sheet
+    data_Lake = data[data['CourseSectionNumber'].str.contains('W')==True]
+    email_list = ''
+    for email in data_Lake['EmailAddress']:
+        email_list += email
+        email_list += '; '
+    email_list = email_list[:-1]
+#   Add email list to bottom of sheet.
+    data_Lake = data_Lake.append(df2)
+    data_Lake = data_Lake[original_columns]
+    data_Lake.at['E List', 'Name'] = email_list
+    data_Lake.to_excel(writer, sheet_name = 'Lake Campus')
+
+
+
+
+
     #writer.sheets['Checks'].column_dimensions['Name'].width = 15
     #help(writer.sheets['Checks'].set_column)
     #writer.sheets['Checks'].set_column('Name','Name',15)
@@ -554,6 +607,7 @@ str2find = sys.argv[-1]
 
 for file in sys.argv:
     # print(file[-2:])
+    cwd = os.getcwd()
     if ".py" in file:
         # print(file[-2:])
         tprint('\n')
