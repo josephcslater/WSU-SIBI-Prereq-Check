@@ -44,9 +44,8 @@ import os
 # This is written as:
 #       "ME2120":(["EGR1010", "ME1040", "PHY2400"],["MTH2310", "ME1040", "PHY2400"]),
 
-print('capstone design')
-print(
-    'ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
+# print('capstone design')
+# print('ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
 
 prereqdict = {"ME1020": ("EGR1010"),
               "ME2120": (["EGR1010", "ME1040", "PHY2400"], ["MTH2310", "ME1040", "PHY2400"]),
@@ -91,7 +90,7 @@ prereqdict = {"ME1020": ("EGR1010"),
               "ME4570": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
               "ME4580": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
               "ME4590": ("ME3360"),  # Verified Aug-16-2016
-              "ME4610": (["ME3360", "3600"]),  # Verified Aug-16-2016
+              "ME4610": (["ME3360", "ME3600"]),  # Verified Aug-16-2016
               "ME4620": (["ME2700", "ME3120", "ME3600"]),
               "ME4680": (["CHM1210", "PHY2410"], ["CHM1210", "PHY1120"]),
               "ME4700": (["ME2700", "MTH2320", "MTH2350"]),
@@ -233,6 +232,7 @@ def passed_class(class_name, classes_taken, course_name):
     class_name is a string of the course a student must pass to
     complete the prerequisites. If the grade received is not sufficient, this
     function must return a False
+    classes_taken is all classes taken within SIBI or the transfer spreadsheet
     course_name is the course the student is registered for. We are checking
     prerequisites for course_name
     '''
@@ -361,26 +361,26 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             # data.loc[student,'Has'] = data.loc[student,["Pre_req_dic"]].values[0]
             tprint('Needs any of the following combinations:')
             allprereqs = ''
-            print('prereqs')
-            print(prereqs)
+            tprint('prereqs')
+            tprint(prereqs)
             if type(prereqs) is tuple:
                 tprint('growing list of prerequisites')
                 for idx, set_ in enumerate(prereqs):
-                    print('all prereqs')
+                    '''print('all prereqs')
                     print(allprereqs)
                     print('set_')
                     print(set_)
                     print(type(set_))
-                    print(type(str(set_)))
+                    print(type(str(set_)))'''
                     if type(set_) is list:
                         for indiv_course in set_:
                             allprereqs = allprereqs + indiv_course + ', '
                         else:
                             allprereqs = allprereqs + str(set_) + ', '
-                    tprint('idx %', idx)
-                    tprint('set_ %', set_)
+                    #tprint('idx %', idx)
+                    #tprint('set_ %', set_)
                     # prereqs[idx] = 'and '.join([str(x) for x in prereqs[idx]])
-                    tprint(set_)
+                    #tprint(set_)
                 allprereqs = allprereqs[:-2]
                 allprereqs = ', or'.join([str(x) for x in prereqs])
             else:
@@ -428,8 +428,12 @@ def read_prereq_report(filename):
                 pre_req_class = data.loc[student].iloc[i][
                                 0:(data.loc[student].iloc[i].find('-->'))]
                 grade_str = data.loc[student].iloc[i + 1]
+                # grade string parsing
                 if data.loc[student].iloc[i + 1].find(';') == -1:
-                    grade = grade_str[-1]
+                    if grade_str[-1] == R: # AP Credit listed as "CR"
+                        grade = grade_str[-2]
+                    else: # Transfer credit ends without ';', listed at TC
+                        grade = grade_str[-1]
                 else:
                     grade = grade_str[
                         data.loc[student].iloc[i + 1].find(';') - 1]
@@ -503,22 +507,46 @@ def check_majors(major_requirement, data, student_list):
 
 def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     data, student_list, course_name = read_prereq_report(filename)
-    print(filename)
+    tprint(filename)
     # print(data)
     file_path =  filename[:filename.rfind('/')+1]
-    print(file_path)
+    tprint(file_path)
     prereqs = prereqdict[course_name]
     data, no_transfer_data = append_transfer(data, student_list)
     data = check_class(course_name, student_list,
                        data, prereqs, no_transfer_data)
     if course_name in majordict:
         data = check_majors(majordict[course_name], data, student_list)
-        #print(data[data.Pre_req_status.notnull()])
-        #print(data[data.Major.notnull()])
+
         try:
-            data = data[data.Major.notnull() and data.Pre_req_status.notnull()]
+            Majors_good = False
+            data1 = data[data.Major.notnull()]
+        except AttributeError:
+            Majors_good = True
+
+        try:
+            Pre_reqs = False
+            data2 = data[data.Pre_req_status.notnull()]
+        except AttributeError:
+            Pre_reqs = True
+
+        if Pre_reqs == False and Majors_good == False:
+            frames = [data1, data2]
+            data = pd.concat(frames)
+        elif Pre_reqs == True:
+            data = data1
+        elif Majors_good == True:
+            data = data2
+        else:
+            data = data
+
+        '''
+        try:
+            data = data[data.Major.notnull() or data.Pre_req_status.notnull()]
         except ValueError:
             data = data[data.Pre_req_status.notnull()]
+        '''
+
         cols = data.columns.tolist()
         cols = cols[:1] + cols[-2:] + cols[1:-2]
         data = data[cols]
@@ -534,8 +562,12 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
 
     email_list = ''
     for email in data['EmailAddress']:
-        email_list += email
-        email_list += '; '
+
+        try:
+            email_list += email
+            email_list += '; '
+        except:
+            print(email)
     email_list = email_list[:-1]
     print(email_list)
     d = {'Name': pd.Series('', index=['E List'])}
