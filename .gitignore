@@ -4,7 +4,7 @@
 JupyterNotebooks/*.xlsx
 JupyterNotebooks/*.xlsx
 
-
+*.zip
 .idea/workspace.xml
 
 
