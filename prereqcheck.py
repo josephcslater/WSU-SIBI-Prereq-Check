@@ -134,61 +134,65 @@ prereqdict = {"ME1020": ("EGR1010"),
               "ME7760": ("ME5760"),
               "ME7780": ("ME6730")}
 
-majordict = {"ME4910": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
+majordict = {"ME4910": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
              "ME2700": ['Engineering - IECS', 'Materials Sci + Egr - BSMSE', 'Materials Sci + Egr - IECS',
                         'Materials Sci + Egr - Pre',
                         'Mathematics - BS', 'Mech Engineering - BSME', 'Mech Engineering - IECS',
                         'Mech Engineering - Pre'],
-             "ME3120": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3210": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3310": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3320": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3350": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3360": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3600": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3610": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3750": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3760": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3150": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4010": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4080": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4120": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4140": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4150": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4160": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4180": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4190": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4210": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4220": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4240": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4250": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4260": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4330": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4340": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4350": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4360": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4430": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4440": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4490": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4520": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4530": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4540": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4550": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4560": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4570": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4580": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4590": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4610": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4620": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4680": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4700": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4720": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4730": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4740": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4750": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4860": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME3870": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"],
-             "ME4880": ["Mech Engineering - BSME", "Materials Sci + Egr - BSMSE"]}
+             "ME3120": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3210": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3310": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3320": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3350": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3360": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3600": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3610": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3750": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3760": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3150": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4010": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4080": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4120": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4140": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4150": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4160": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4180": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4190": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4210": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4220": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4240": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4250": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4260": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4330": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4340": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4350": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4360": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4430": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4440": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4490": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4520": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4530": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4540": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4550": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4560": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4570": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4580": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4590": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4610": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4620": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4680": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4700": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4720": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4730": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4740": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME4750": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4860": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3870": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4880": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre']}
 
 text_output = False
 
@@ -430,7 +434,7 @@ def read_prereq_report(filename):
                 grade_str = data.loc[student].iloc[i + 1]
                 # grade string parsing
                 if data.loc[student].iloc[i + 1].find(';') == -1:
-                    if grade_str[-1] == R: # AP Credit listed as "CR"
+                    if grade_str[-1] == 'R': # AP Credit listed as "CR"
                         grade = grade_str[-2]
                     else: # Transfer credit ends without ';', listed at TC
                         grade = grade_str[-1]
@@ -561,13 +565,18 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     # print(data['EmailAddress'][0])
 
     email_list = ''
-    for email in data['EmailAddress']:
-
+    #for email in data['EmailAddress']:
+    for index, row in data.iterrows():
         try:
-            email_list += email
-            email_list += '; '
+            if row['Pre_req_status'] == 'Missing prereqs':
+                try:
+                    email_list += row['EmailAddress']
+                    email_list += '; '
+                except:
+                    email_list += 'missing email address'
+                    email_list += '; '
         except:
-            print(email)
+            print('No prerequisite status')
     email_list = email_list[:-1]
     print(email_list)
     d = {'Name': pd.Series('', index=['E List'])}
@@ -587,9 +596,19 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
 #   Create Dayton Sheet
     data_Dayton = data[data['CourseSectionNumber'].str.contains('W')==False]
     email_list = ''
-    for email in data_Dayton['EmailAddress']:
-        email_list += email
-        email_list += '; '
+    #for email in data_Dayton['EmailAddress']:
+    for index, row in data_Dayton.iterrows():
+        try:
+            if row['Pre_req_status'] == 'Missing prereqs':
+                try:
+                    email_list += row['EmailAddress']
+                    email_list += '; '
+                except:
+                    email_list += 'missing email address'
+                    email_list += '; '
+        except:
+            print('No prerequisite status')
+
     email_list = email_list[:-1]
 #   Add email list to bottom of sheet.
     data_Dayton = data_Dayton.append(df2)
@@ -602,9 +621,19 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
 #   Create Lake Sheet
     data_Lake = data[data['CourseSectionNumber'].str.contains('W')==True]
     email_list = ''
-    for email in data_Lake['EmailAddress']:
-        email_list += email
-        email_list += '; '
+    #for email in data_Lake['EmailAddress']:
+    for index, row in data_Lake.iterrows():
+        try:
+            if row['Pre_req_status'] == 'Missing prereqs':
+                try:
+                    email_list += row['EmailAddress']
+                    email_list += '; '
+                except:
+                    email_list += 'missing email address'
+                    email_list += '; '
+        except:
+            print('No prerequisite status')
+
     email_list = email_list[:-1]
 #   Add email list to bottom of sheet.
     data_Lake = data_Lake.append(df2)
