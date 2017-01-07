@@ -675,6 +675,8 @@ for file in sys.argv:
         # print("Ignoring {}".format(file))
     elif "Student_prerequisite_data.xlsx" in file or '~' in file:
         tprint('\n')
+    elif ".xlsx" not in file:
+        print('{} is not a valid SIBI report. Wrong extension.'.format(file))
     else:
         tprint(file)
         tprint('**************')
