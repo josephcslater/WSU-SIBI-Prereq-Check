@@ -427,10 +427,12 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
 
 def read_prereq_report(filename):
-    # recoomend a try loop hack because sheet name keeps changing
+    # Changed to read first sheet automatically/default
+#    data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
+#                         sheetname="Page1_1", converters={'PhoneNumber': str})
     data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
-                         sheetname="Page1_1", converters={'PhoneNumber': str})
-    
+                         sheetname=0, converters={'PhoneNumber': str})
+
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
 
