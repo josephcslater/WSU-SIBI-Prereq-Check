@@ -48,22 +48,22 @@ import os
 # print('ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
 
 prereqdict = {"ME1020": ("EGR1010"),
-              "ME2120": (["EGR1010", "ME1040", "PHY2400"], ["MTH2310", "ME1040", "PHY2400"]),
+              "ME2120": (["EGR1010", "ME1040", "PHY2400"], ["EGR1010", "ME2020", "PHY2400"], ["MTH2310", "ME1040", "PHY2400"], ["MTH2310", "ME2020", "PHY2400"]),
               "ME2210": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
               # This is a pre or co requisite. How to code? I think this works now.
               "ME2600": ("ME2700c"),  # Recitation is a co-requisite
               "ME2700": (["CHM1210", "PHY2400"]),
-              "ME3120": ("ME1020", "ME2120"),  # Verified Aug-15-2016
+              "ME3120": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
               "ME3210": (["EE2010", "ME2210", "ME3120", "ME3350", "MTH2350"]),  # Verified Aug-16-2016
               "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
               "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
               "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
               "ME3360": (["ME3350", "MTH2350"]),  # Verified Aug-15-2016
-              "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350", "ME3600c"]),
+              "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"]),
               "ME3750": ("ME2700"),  # Verified Aug-15-2016
               "ME3760": ("ME3750"),  # Verified Aug-15-2016
               "ME4010": (["ME3360", "ME3210"]),  # Verified Aug-15-2016
-              "ME4080": (["MTH2350", "ME3210"], ["MTH2530", "ME3210"]),  # Verified Aug-16-2016
+              "ME4080": (["MTH2350", "ME3210"], ["MTH2330", "MTH2530", "ME3210"]),  # Verified Aug-16-2016
               "ME4120": (["MTH2320", "MTH2350", "ME3120"], ["MTH2320", "MTH2330", "MTH2530", "ME3120"]),
               "ME4140": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
               "ME4150": ("ME4140"),  # Verified Aug-16-2016
@@ -74,11 +74,11 @@ prereqdict = {"ME1020": ("EGR1010"),
               "ME4220": ("ME3210"),
               "ME4240": ("ME2210"),  # Verified Aug-16-2016
               "ME4250": ("ME2210"),  # Verified Aug-16-2016
-              "ME4260": (["MTH2350"], ["MTH2530"]),
+              "ME4260": (["MTH2350"], ["MTH2530", "MTH2530"]),
               "ME4330": ("ME3350"),  # Verified Aug-16-2016
               "ME4340": ("ME3360"),  # Verified Aug-16-2016
               "ME4350": ("ME3350"),  # Verified Aug-16-2016
-              "ME4360": (["ME3320", "ME3350", "MTH2350"], ["ME3320", "ME3350", "MTH2330"]),
+              "ME4360": (["ME3320", "ME3350", "MTH2350"], ["ME3320", "ME3350", "MTH2530","MTH2330"]),
               "ME4430": ("ME3350"),  # Verified Aug-16-2016
               "ME4440": ("ME3350"),  # Verified Aug-16-2016
               "ME4490": ("ME3120"),  # Verified Aug-16-2016
@@ -93,7 +93,7 @@ prereqdict = {"ME1020": ("EGR1010"),
               "ME4610": (["ME3360", "ME3600"]),  # Verified Aug-16-2016
               "ME4620": (["ME2700", "ME3120", "ME3600"]),
               "ME4680": (["CHM1210", "PHY2410"], ["CHM1210", "PHY1120"]),
-              "ME4700": (["ME2700", "MTH2320", "MTH2350"]),
+              "ME4700": (["ME2700", "MTH2320", "MTH2350"],["ME2700", "MTH2320", "MTH2330", "MTH2530"]),
               "ME4720": ("ME2700"),  # Verified Aug-16-2016
               "ME4730": ("ME2700"),  # Verified Aug-16-2016
               "ME4740": (["ME2700", "ME3120", "ME4620c"]),
@@ -108,30 +108,31 @@ prereqdict = {"ME1020": ("EGR1010"),
               "ME4880": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
               "ME4910": (
               ["ME2020", "EGR3350", "MTH2320", "MTH2350", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
+               "ME4620c"],["ME2020", "EGR3350", "MTH2320", "MTH2330", "MTH2530", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
                "ME4620c"]),
               "ME7060": (["ME6120", "ME7100"]),
               "ME7080": (["ME6120", "ME7100"]),
               "ME7120": ("ME6120"),
               "ME7140": (["ME6120", "ME7100"]),
               "ME7160": (["ME6120", "ME7100"]),
-              "ME7200": ("ME5120"),
+#              "ME7200": ("ME5120"),
               "ME7210": ("ME6210"),
-              "ME7250": ("ME5210"),
-              "ME7300": ("ME5350"),
-              "ME7330": ("ME5360"),
+#              "ME7250": ("ME5210"),
+#              "ME7300": ("ME5350"),
+#              "ME7330": ("ME5360"),
               "ME7340": ("ME6010"),
-              "ME7350": ("ME5360"),
+#              "ME7350": ("ME5360"),
               "ME7390": ("ME7500"),
               "ME7400": ("ME6330"),
-              "ME7500": (["ME5320", "ME5750"]),
-              "ME7520": (["ME5310", "ME5750"]),
+#              "ME7500": (["ME5320", "ME5750"]),
+#              "ME7520": (["ME5310", "ME5750"]),
               "ME7550": ("ME7500"),
               "ME7690": ("ME6210"),
               "ME7720": (["ME6720", "ME5750"]),
               "ME7730": ("ME6700"),
               "ME7740": (),
               "ME7750": ("ME6700"),
-              "ME7760": ("ME5760"),
+#              "ME7760": ("ME5760"),
               "ME7780": ("ME6730")}
 
 majordict = {"ME4910": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
@@ -139,7 +140,8 @@ majordict = {"ME4910": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Ma
                         'Materials Sci + Egr - Pre',
                         'Mathematics - BS', 'Mech Engineering - BSME', 'Mech Engineering - IECS',
                         'Mech Engineering - Pre'],
-             "ME3120": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3120": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre',
+                        'Mech Engineering - IECS', 'Materials Sci + Egr - IECS'],
              "ME3210": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
              "ME3310": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
              "ME3320": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
@@ -234,12 +236,34 @@ def isbetterthan(grade_needed, grade_received):
 def passed_class(class_name, classes_taken, course_name):
     '''
     class_name is a string of the course a student must pass to
-    complete the prerequisites. If the grade received is not sufficient, this
+    complete the prerequisites.
+
+    class_name can have qualifiers within the string. - *letter* means that the required grade is *letter*.
+    For instance, ME2120-C means that a C grade is required to satisfy the prerequisite.
+
+    With a single letter c appended, it is allowable as a corequisite.
+    For instance, ME2700c means that ME 2700 must be taken as a prerequisite, or is allowable as a co-requisite.
+
+    Because it is nonsensical, it is not allowable to have a letter grade requirement and corequisite allowance.
+
+    If the grade received is not sufficient, this
     function must return a False
     classes_taken is all classes taken within SIBI or the transfer spreadsheet
     course_name is the course the student is registered for. We are checking
     prerequisites for course_name
+
+    -----------------------
+    class_name should now be parsed ahead of time with this logic rewritten to enable spcific grade requirements to be
+    embedded in the prerequisite dictionary.
+
+    First: look for a -
+    Second: if there is a dash, split out the course name and grade required
+         Now the grade can be checked with the answer (satisfied) returned in answer)
+    Third: if there is no dash but there is a c (elif), log the course as a corequisite.
+         All we have to do is look to see if they are taking it now.
+         If no, did they take it in the past and get at least a D
     '''
+
 
     co_or_preqdict = {"ME2600": ("ME2700")}
     fail_text = ''
@@ -403,8 +427,10 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
 
 def read_prereq_report(filename):
+    # recoomend a try loop hack because sheet name keeps changing
     data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
-                         sheetname="Page1", converters={'PhoneNumber': str})
+                         sheetname="Page1_1", converters={'PhoneNumber': str})
+    
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
 
