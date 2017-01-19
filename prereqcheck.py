@@ -110,28 +110,28 @@ prereqdict = {"ME1020": ("EGR1010"),
               ["ME2020", "EGR3350", "MTH2320", "MTH2350", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
                "ME4620c"],["ME2020", "EGR3350", "MTH2320", "MTH2330", "MTH2530", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
                "ME4620c"]),
-              "ME7060": (["ME6120", "ME7100"]),
-              "ME7080": (["ME6120", "ME7100"]),
-              "ME7120": ("ME6120"),
-              "ME7140": (["ME6120", "ME7100"]),
-              "ME7160": (["ME6120", "ME7100"]),
+              "ME7060": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+              "ME7080": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+              "ME7120": ("ME4120","ME6120"),
+              "ME7140": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+              "ME7160": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
 #              "ME7200": ("ME5120"),
-              "ME7210": ("ME6210"),
+              "ME7210": ("ME4210","ME6210"),
 #              "ME7250": ("ME5210"),
 #              "ME7300": ("ME5350"),
-#              "ME7330": ("ME5360"),
-              "ME7340": ("ME6010"),
+              "ME7330": (),#"ME5360"
+              "ME7340": ("ME4010","ME6010"),
 #              "ME7350": ("ME5360"),
               "ME7390": ("ME7500"),
-              "ME7400": ("ME6330"),
-#              "ME7500": (["ME5320", "ME5750"]),
+              "ME7400": ("ME4330","ME6330"),
+              "ME7500": (),# ["ME5320", "ME5750"]
 #              "ME7520": (["ME5310", "ME5750"]),
               "ME7550": ("ME7500"),
-              "ME7690": ("ME6210"),
-              "ME7720": (["ME6720", "ME5750"]),
-              "ME7730": ("ME6700"),
+              "ME7690": ("ME4210","ME6210"),
+              "ME7720": ("ME4720","ME6720"),#, "ME5750"
+              "ME7730": ("ME4700","ME6700"),
               "ME7740": (),
-              "ME7750": ("ME6700"),
+              "ME7750": ("ME4700","ME6700"),
 #              "ME7760": ("ME5760"),
               "ME7780": ("ME6730")}
 
@@ -258,11 +258,11 @@ def passed_class(class_name, classes_taken, course_name):
 
     First: look for a -
     Second: if there is a dash, split out the course name and grade required
-         Now the grade can be checked with the answer (satisfied) returned in answer)
+        Now the grade can be checked with the answer (satisfied) returned in answer)
     Third: if there is no dash but there is a c (elif), log the course as a corequisite.
-         All we have to do is look to see if they are taking it now.
-         If no, did they take it in the past and get at least a D
-    '''
+        All we have to do is look to see if they are taking it now.
+        If no, did they take it in the past and get at least a D
+   '''
 
 
     co_or_preqdict = {"ME2600": ("ME2700")}
@@ -330,6 +330,8 @@ def satisfied_requirements(requirements, classes_taken, course_name):
         satisfied = pass_all(requirements, classes_taken, course_name)
     elif type(requirements) is tuple:
         satisfied = False
+        if len(requirements) == 0:
+            satisfied = True
         for requirement in requirements:
             satisfied = satisfied_requirements(
                 requirement, classes_taken, course_name)
@@ -427,12 +429,8 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
 
 def read_prereq_report(filename):
-    # Changed to read first sheet automatically/default
-#    data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
-#                         sheetname="Page1_1", converters={'PhoneNumber': str})
     data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
                          sheetname=0, converters={'PhoneNumber': str})
-
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
 
