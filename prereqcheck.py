@@ -47,7 +47,7 @@ import os
 # print('capstone design')
 # print('ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
 
-prereqdict = {"ME1020": ("EGR1010"),
+prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
               "ME2120": (["EGR1010", "ME1040", "PHY2400"], ["EGR1010", "ME2020", "PHY2400"], ["MTH2310", "ME1040", "PHY2400"], ["MTH2310", "ME2020", "PHY2400"]),
               "ME2210": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
               # This is a pre or co requisite. How to code? I think this works now.
