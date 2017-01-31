@@ -135,6 +135,11 @@ prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
 #              "ME7760": ("ME5760"),
               "ME7780": ("ME6730")}
 
+#print(prereqdict)
+import collections
+#print(collections.OrderedDict(sorted(prereqdict.items())))
+prereqdict = collections.OrderedDict(sorted(prereqdict.items()))
+
 majordict = {"ME4910": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
              "ME2700": ['Engineering - IECS', 'Materials Sci + Egr - BSMSE', 'Materials Sci + Egr - IECS',
                         'Materials Sci + Egr - Pre',
@@ -477,6 +482,38 @@ def read_prereq_report(filename):
     return data, student_list, Course_Name
 
 
+def prereq_list(prereqdict = prereqdict):
+    '''prereq_list()'''
+    for i in prereqdict:
+        print(i + ':' + ' ' + flat_list(prereqdict[i]))
+
+def flat_list(list):
+    '''outlist = flat_list(prereqdict["ME2120"])
+    print(outlist)
+    will list the unique prerequisites of ME2120 according to the dictionary'''
+    out = ''
+    if type(list) is str:
+        if list[-1] is 'c':
+            list = list[:-1]
+        out = list
+    else:
+        for sublist in list:
+            if type(sublist) is str:
+                if sublist not in out:
+                    if sublist[-1] is 'c':
+                        sublist = sublist[:-1]
+                    out = out + ',' + sublist
+            else:
+                for val in sublist:
+                    if val not in out:
+                        if val[-1] is 'c':
+                            val = val[:-1]
+                        out = out + ',' + val
+    if len(out) is not 0 and out[0] is ',':
+        out = out[1:]
+    return out
+
+
 # Append transfered data to student record
 def append_transfer(data, student_list):
     filename = "/Users/jslater/Documents/OneDriveBusiness/OneDrive - Wright State University/Chair-OneDrive/PrereqData/Student_prerequisite_data.xlsx"
@@ -701,6 +738,8 @@ for file in sys.argv:
         # print("Ignoring {}".format(file))
     elif "Student_prerequisite_data.xlsx" in file or '~' in file:
         tprint('\n')
+    elif '--dump_prereqs' in file:
+        prereq_list()
     elif ".xlsx" not in file:
         print('{} is not a valid SIBI report. Wrong extension.'.format(file))
     else:
