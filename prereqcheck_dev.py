@@ -47,7 +47,7 @@ import os
 # print('capstone design')
 # print('ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
 
-prereqdict = {"ME1020": ("EGR1010"),
+prereqdict = {"ME1020": (["EGR1010"],["MTH2310"]),
               "ME2120": (["EGR1010", "ME1040", "PHY2400"], ["EGR1010", "ME2020", "PHY2400"], ["MTH2310", "ME1040", "PHY2400"], ["MTH2310", "ME2020", "PHY2400"]),
               "ME2210": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
               # This is a pre or co requisite. How to code? I think this works now.
@@ -76,7 +76,7 @@ prereqdict = {"ME1020": ("EGR1010"),
               "ME4250": ("ME2210"),  # Verified Aug-16-2016
               "ME4260": (["MTH2350"], ["MTH2530", "MTH2530"]),
               "ME4330": ("ME3350"),  # Verified Aug-16-2016
-              "ME4340": ("ME3360"),  # Verified Aug-16-2016
+              "ME4340": ("ME3360c"),  # Verified Aug-16-2016
               "ME4350": ("ME3350"),  # Verified Aug-16-2016
               "ME4360": (["ME3320", "ME3350", "MTH2350"], ["ME3320", "ME3350", "MTH2530","MTH2330"]),
               "ME4430": ("ME3350"),  # Verified Aug-16-2016
@@ -216,6 +216,38 @@ def isbetterthan(grade_needed, grade_received):
         print("Warning: Grade needed isn't a real grade: {}.".format(grade_needed))
         answer = 3
     return answer
+
+def prereq_list(prereqdict = prereqdict):
+    '''prereq_list()'''
+    for i in prereqdict:
+        print(i + ':' + ' ' + flat_list(prereqdict[i]))
+
+def flat_list(list):
+    '''outlist = flat_list(prereqdict["ME2120"])
+    print(outlist)
+    will list the unique prerequisites of ME2120 according to the dictionary'''
+    out = ''
+    if type(list) is str:
+        if list[-1] is 'c':
+            list = list[:-1]
+        out = list
+    else:
+        for sublist in list:
+            if type(sublist) is str:
+                if sublist not in out:
+                    if sublist[-1] is 'c':
+                        sublist = sublist[:-1]
+                    out = out + ',' + sublist
+            else:
+                for val in sublist:
+                    if val not in out:
+                        if val[-1] is 'c':
+                            val = val[:-1]
+                        out = out + ',' + val
+    if len(out) is not 0 and out[0] is ',':
+        out = out[1:]
+    return out
+
 
 # Check if single course was passed
 def passed_class(class_name, classes_taken, course_name, data):
