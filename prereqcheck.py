@@ -145,10 +145,7 @@ majordict = {"ME4910": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Ma
                         'Materials Sci + Egr - Pre',
                         'Mathematics - BS', 'Mech Engineering - BSME', 'Mech Engineering - IECS',
                         'Mech Engineering - Pre'],
-             "ME3120": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre',
-                        'Mech Engineering - IECS', 'Materials Sci + Egr - IECS'],
              "ME3210": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3310": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
              "ME3320": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
              "ME3350": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
              "ME3360": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
@@ -269,17 +266,27 @@ def passed_class(class_name, classes_taken, course_name):
         If no, did they take it in the past and get at least a D
    '''
 
+    if '-' in class_name:
+        grade_required = class_name[-1]
+        class_name = class_name[:-2]
+    else:
+        grade_required = 'd'
+
+
 
     co_or_preqdict = {"ME2600": ("ME2700")}
     fail_text = ''
     answer = False
     if class_name in classes_taken:
-        if class_name is "ME2120" or class_name is "ME3310" or class_name is "ME2700":
+
+#        if class_name is "ME2120" or class_name is "ME3310" or class_name is "ME2700":
+        if grade_required is 'c' or grade_required is 'C':
             answer = isC(classes_taken[class_name])
         # I hate this hard coding of co-requisite exception. I believe it is
         # now fixed, but this is left in just in case.
-        elif course_name is "ME2600" and class_name is "ME2700":
-            answer = True
+        # Below was a co-req hard code before the appendage of c worked.
+        #elif course_name is "ME2600" and class_name is "ME2700":
+        #    answer = True
         else:
             answer = isD(classes_taken[class_name])
         # will fall to this if no grade assigned, intercept corequisite
@@ -293,7 +300,7 @@ def passed_class(class_name, classes_taken, course_name):
                 # print('Failed {} with grade of {}'.format(class_name, classes_taken[class_name] ))
                 fail_text = 'Failed {} with grade of {}\n.'.format(
                     class_name, classes_taken[class_name])
-    elif (class_name[:class_name.find('c')] in classes_taken
+    elif (class_name[:class_name.find('c')] in classes_taken # this long test is for co-requisites
           and classes_taken[class_name[:class_name.find('c')]] == '>') or (class_name[:class_name.find('c')]
                                                                            in classes_taken and passed_class(
         class_name[:class_name.find('c')], classes_taken, course_name)[0]):  # corequisite taken earlier and passed?
