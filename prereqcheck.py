@@ -54,7 +54,7 @@ prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
               "ME2600": ("ME2700c"),  # Recitation is a co-requisite
               "ME2700": (["CHM1210", "PHY2400"]),
               "ME3120": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
-              "ME3210": (["EE2010", "ME2210", "ME3120", "ME3350", "MTH2350"],["EE2010", "ME2210", "ME3120", "ME3350", "MTH2350"]),  # Verified Aug-16-2016
+              "ME3210": (["EE2010", "ME2210", "ME3120", "ME3350", "MTH2350"],["EE2010", "ME2210", "ME3120", "ME3350", "MTH2330", "MTH2530"]),  # Verified Aug-16-2016
               "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
               "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
               "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
