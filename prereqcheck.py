@@ -47,93 +47,104 @@ import os
 # print('capstone design')
 # print('ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
 
-prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
-              "ME2120": (["EGR1010", "ME1040", "PHY2400"], ["EGR1010", "ME2020", "PHY2400"], ["MTH2310", "ME1040", "PHY2400"], ["MTH2310", "ME2020", "PHY2400"]),
-              "ME2210": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
-              # This is a pre or co requisite. How to code? I think this works now.
-              "ME2600": ("ME2700c"),  # Recitation is a co-requisite
-              "ME2700": (["CHM1210", "PHY2400"]),
-              "ME3120": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
-              "ME3210": (["EE2010", "ME2210", "ME3120", "ME3350", "MTH2350"],["EE2010", "ME2210", "ME3120", "ME3350", "MTH2330", "MTH2530"]),  # Verified Aug-16-2016
-              "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
-              "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
-              "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
-              "ME3360": (["ME3350", "MTH2350"],["ME3350", "MTH2350"]),  # Verified Aug-15-2016
-              "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"],["EE2010", "EGR3350", "ME2120", "MTH2330", "MTH2530"]),
-              "ME3750": ("ME2700"),  # Verified Aug-15-2016
-              "ME3760": ("ME3750"),  # Verified Aug-15-2016
-              "ME4010": (["ME3360", "ME3210"]),  # Verified Aug-15-2016
-              "ME4080": (["MTH2350", "ME3210"], ["MTH2330", "MTH2530", "ME3210"]),  # Verified Aug-16-2016
-              "ME4120": (["MTH2320", "MTH2350", "ME3120"], ["MTH2320", "MTH2330", "MTH2530", "ME3120"]),
-              "ME4140": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
-              "ME4150": ("ME4140"),  # Verified Aug-16-2016
-              "ME4160": (["ME2020", "ME2210", "ME3120"], ["ME1040", "ME2210", "ME3120"]),
-              "ME4180": ("ME2700"),  # Verified Aug-16-2016
-              "ME4190": (["MTH2350", "MTH2320", "ME3350"], ["MTH2330", "MTH2530", "MTH2320", "ME3350"]),
-              "ME4210": ("ME3210"),  # Verified Aug-16-2016
-              "ME4220": ("ME3210"),
-              "ME4240": ("ME2210"),  # Verified Aug-16-2016
-              "ME4250": ("ME2210"),  # Verified Aug-16-2016
-              "ME4260": (["MTH2350"], ["MTH2530", "MTH2530"]),
-              "ME4330": ("ME3350"),  # Verified Aug-16-2016
-              "ME4340": ("ME3360"),  # Verified Aug-16-2016
-              "ME4350": ("ME3350"),  # Verified Aug-16-2016
-              "ME4360": (["ME3320", "ME3350", "MTH2350"], ["ME3320", "ME3350", "MTH2530","MTH2330"]),
-              "ME4430": ("ME3350"),  # Verified Aug-16-2016
-              "ME4440": ("ME3350"),  # Verified Aug-16-2016
-              "ME4490": ("ME3120"),  # Verified Aug-16-2016
-              "ME4520": ("ME3350"),  # Verified Aug-16-2016
-              "ME4530": ("ME3310"),  # Verified Aug-16-2016
-              "ME4540": ("ME3360"),  # Verified Aug-16-2016
-              "ME4550": ("ME3360"),  # Verified Aug-16-2016
-              "ME4560": ("ME3350"),  # Verified Aug-16-2016
-              "ME4570": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-              "ME4580": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-              "ME4590": ("ME3360"),  # Verified Aug-16-2016
-              "ME4610": (["ME3360", "ME3600"]),  # Verified Aug-16-2016
-              "ME4620": (["ME2700", "ME3120", "ME3600"]),
-              "ME4680": (["CHM1210", "PHY2410"], ["CHM1210", "PHY1120"]),
-              "ME4700": (["ME2700", "MTH2320", "MTH2350"],["ME2700", "MTH2320", "MTH2330", "MTH2530"]),
-              "ME4720": ("ME2700"),  # Verified Aug-16-2016
-              "ME4730": ("ME2700"),  # Verified Aug-16-2016
-              "ME4740": (["ME2700", "ME3120", "ME4620c"]),
-              "ME4750": (["ME2600", "ME2700"]),  # Verified Aug-16-2016
-              "ME4770": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
-              "ME4820": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-              "ME4830": ("ME2700"),  # Verified Aug-16-2016
-              "ME4840": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
-              "ME4850": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-              "ME4860": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
-              "ME4870": (["ME2210"], ["BME3212"], ["ISE3212"]),
-              "ME4880": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-              "ME4910": (
-              ["ME2020", "EGR3350", "MTH2320", "MTH2350", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
-               "ME4620c"],["ME2020", "EGR3350", "MTH2320", "MTH2330", "MTH2530", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
-               "ME4620c"]),
-              "ME7060": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
-              "ME7080": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
-              "ME7120": ("ME4120","ME6120"),
-              "ME7140": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
-              "ME7160": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
-#              "ME7200": ("ME5120"),
-              "ME7210": ("ME4210","ME6210"),
-#              "ME7250": ("ME5210"),
-#              "ME7300": ("ME5350"),
-              "ME7330": (),#"ME5360"
-              "ME7340": ("ME4010","ME6010"),
-#              "ME7350": ("ME5360"),
-              "ME7390": ("ME7500"),
-              "ME7400": ("ME4330","ME6330"),
-              "ME7500": (),# ["ME5320", "ME5750"]
-#              "ME7520": (["ME5310", "ME5750"]),
-              "ME7550": ("ME7500"),
-              "ME7690": ("ME4210","ME6210"),
-              "ME7720": ("ME4720","ME6720"),#, "ME5750"
-              "ME7730": ("ME4700","ME6700"),
-              "ME7740": (),
-              "ME7750": ("ME4700","ME6700"),
-#              "ME7760": ("ME5760"),
-              "ME7780": ("ME6730")}
+
+from prereq_config import *
+
+try:
+    prereqdict = load_prerequisites(prereqfilename = prereqfilename)
+except FileNotFoundError:
+    prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
+                  "ME2120": (["EGR1010", "ME1040", "PHY2400"], ["EGR1010", "ME2020", "PHY2400"], ["MTH2310", "ME1040", "PHY2400"], ["MTH2310", "ME2020", "PHY2400"]),
+                  "ME2210": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
+                  # This is a pre or co requisite. How to code? I think this works now.
+                  "ME2600": ("ME2700c"),  # Recitation is a co-requisite
+                  "ME2700": (["CHM1210", "PHY2400"]),
+                  "ME3120": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
+                  "ME3210": (["EE2010", "ME2210", "ME3120", "ME3350", "MTH2350"],["EE2010", "ME2210", "ME3120", "ME3350", "MTH2330", "MTH2530"]),  # Verified Aug-16-2016
+                  "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
+                  "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
+                  "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
+                  "ME3360": (["ME3350", "MTH2350"],["ME3350", "MTH2350"]),  # Verified Aug-15-2016
+                  "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"],["EE2010", "EGR3350", "ME2120", "MTH2330", "MTH2530"]),
+                  "ME3750": ("ME2700"),  # Verified Aug-15-2016
+                  "ME3760": ("ME3750"),  # Verified Aug-15-2016
+                  "ME4010": (["ME3360", "ME3210"]),  # Verified Aug-15-2016
+                  "ME4080": (["MTH2350", "ME3210"], ["MTH2330", "MTH2530", "ME3210"]),  # Verified Aug-16-2016
+                  "ME4120": (["MTH2320", "MTH2350", "ME3120"], ["MTH2320", "MTH2330", "MTH2530", "ME3120"]),
+                  "ME4140": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
+                  "ME4150": ("ME4140"),  # Verified Aug-16-2016
+                  "ME4160": (["ME2020", "ME2210", "ME3120"], ["ME1040", "ME2210", "ME3120"]),
+                  "ME4180": ("ME2700"),  # Verified Aug-16-2016
+                  "ME4190": (["MTH2350", "MTH2320", "ME3350"], ["MTH2330", "MTH2530", "MTH2320", "ME3350"]),
+                  "ME4210": ("ME3210"),  # Verified Aug-16-2016
+                  "ME4220": ("ME3210"),
+                  "ME4240": ("ME2210"),  # Verified Aug-16-2016
+                  "ME4250": ("ME2210"),  # Verified Aug-16-2016
+                  "ME4260": (["MTH2350"], ["MTH2530", "MTH2530"]),
+                  "ME4330": ("ME3350"),  # Verified Aug-16-2016
+                  "ME4340": ("ME3360"),  # Verified Aug-16-2016
+                  "ME4350": ("ME3350"),  # Verified Aug-16-2016
+                  "ME4360": (["ME3320", "ME3350", "MTH2350"], ["ME3320", "ME3350", "MTH2530","MTH2330"]),
+                  "ME4430": ("ME3350"),  # Verified Aug-16-2016
+                  "ME4440": ("ME3350"),  # Verified Aug-16-2016
+                  "ME4490": ("ME3120"),  # Verified Aug-16-2016
+                  "ME4520": ("ME3350"),  # Verified Aug-16-2016
+                  "ME4530": ("ME3310"),  # Verified Aug-16-2016
+                  "ME4540": ("ME3360"),  # Verified Aug-16-2016
+                  "ME4550": ("ME3360"),  # Verified Aug-16-2016
+                  "ME4560": ("ME3350"),  # Verified Aug-16-2016
+                  "ME4570": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                  "ME4580": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                  "ME4590": ("ME3360"),  # Verified Aug-16-2016
+                  "ME4610": (["ME3360", "ME3600"]),  # Verified Aug-16-2016
+                  "ME4620": (["ME2700", "ME3120", "ME3600"]),
+                  "ME4680": (["CHM1210", "PHY2410"], ["CHM1210", "PHY1120"]),
+                  "ME4700": (["ME2700", "MTH2320", "MTH2350"],["ME2700", "MTH2320", "MTH2330", "MTH2530"]),
+                  "ME4720": ("ME2700"),  # Verified Aug-16-2016
+                  "ME4730": ("ME2700"),  # Verified Aug-16-2016
+                  "ME4740": (["ME2700", "ME3120", "ME4620c"]),
+                  "ME4750": (["ME2600", "ME2700"]),  # Verified Aug-16-2016
+                  "ME4770": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
+                  "ME4820": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                  "ME4830": ("ME2700"),  # Verified Aug-16-2016
+                  "ME4840": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
+                  "ME4850": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                  "ME4860": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
+                  "ME4870": (["ME2210"], ["BME3212"], ["ISE3212"]),
+                  "ME4880": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                  "ME4910": (
+                  ["ME2020", "EGR3350", "MTH2320", "MTH2350", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
+                   "ME4620c"],["ME2020", "EGR3350", "MTH2320", "MTH2330", "MTH2530", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
+                   "ME4620c"]),
+                  "ME7060": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+                  "ME7080": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+                  "ME7120": ("ME4120","ME6120"),
+                  "ME7140": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+                  "ME7160": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+    #              "ME7200": ("ME5120"),
+                  "ME7210": ("ME4210","ME6210"),
+    #              "ME7250": ("ME5210"),
+    #              "ME7300": ("ME5350"),
+                  "ME7330": (),#"ME5360"
+                  "ME7340": ("ME4010","ME6010"),
+    #              "ME7350": ("ME5360"),
+                  "ME7390": ("ME7500"),
+                  "ME7400": ("ME4330","ME6330"),
+                  "ME7500": (),# ["ME5320", "ME5750"]
+    #              "ME7520": (["ME5310", "ME5750"]),
+                  "ME7550": ("ME7500"),
+                  "ME7690": ("ME4210","ME6210"),
+                  "ME7720": ("ME4720","ME6720"),#, "ME5750"
+                  "ME7730": ("ME4700","ME6700"),
+                  "ME7740": (),
+                  "ME7750": ("ME4700","ME6700"),
+    #              "ME7760": ("ME5760"),
+                  "ME7780": ("ME6730")}
+finally:
+    print('')
+
+
+
 
 #print(prereqdict)
 import collections
@@ -197,6 +208,7 @@ majordict = {"ME4910": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Ma
                         'Materials Sci + Egr - Pre'],
              "ME4880": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
                         'Materials Sci + Egr - Pre']}
+
 
 text_output = False
 
@@ -724,6 +736,47 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     tprint('\a')
     print('end')
     return data
+
+
+# load prerequisites.xlsx
+def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
+    pr = pd.io.excel.read_excel(prereqfilename)
+    preqs = dict()
+    for class_name in set(list(pr)):
+        # print(class_name)
+        if '.' not in class_name:
+            all_columns_with_class = [x for x in list(pr) if class_name in x]
+            # print(pr[class_name])
+            # print(len(list(pr[class_name])))
+            # print(all_columns_with_class)
+            if len(all_columns_with_class) is 1:
+                # print('hi')
+                # print(class_name)
+                # preqs[class_name] = pr[class_name]
+                # print(list(pd.Series.dropna(pr[class_name])))
+                preqs[class_name] = tuple([list(pd.Series.dropna(pr[class_name]))])
+                # print(preqs[class_name])
+                # print(preqs)
+            else:
+                for num, class_case in enumerate(all_columns_with_class):
+                    # print(num)
+                    # print(class_case)
+                    # print('.')
+                    if class_name is class_case:
+                        preqs[class_name] = [list(pd.Series.dropna(pr[class_case]))]
+                        # print(preqs[class_name])
+                    else:
+                        # print(num)
+                        # print(list(pd.Series.dropna(pr[class_case])))
+                        preqs[class_name].append(list(pd.Series.dropna(pr[class_case])))
+                        preqs[class_name][num] = list(pd.Series.dropna(pr[class_case]))
+                preqs[class_name] = tuple(preqs[class_name])
+    for key in preqs:
+        print(preqs[key])
+    return preqs
+
+
+
 
 
 # ! /usr/bin/env python
