@@ -50,6 +50,44 @@ import os
 
 from prereq_config import *
 
+def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
+    pr = pd.io.excel.read_excel(prereqfilename)
+    preqs = dict()
+    for class_name in set(list(pr)):
+        # print(class_name)
+        if '.' not in class_name:
+            all_columns_with_class = [x for x in list(pr) if class_name in x]
+            # print(pr[class_name])
+            # print(len(list(pr[class_name])))
+            # print(all_columns_with_class)
+            if len(all_columns_with_class) is 1:
+                # print('hi')
+                # print(class_name)
+                # preqs[class_name] = pr[class_name]
+                # print(list(pd.Series.dropna(pr[class_name])))
+                preqs[class_name] = tuple([list(pd.Series.dropna(pr[class_name]))])
+                # print(preqs[class_name])
+                # print(preqs)
+            else:
+                for num, class_case in enumerate(all_columns_with_class):
+                    # print(num)
+                    # print(class_case)
+                    # print('.')
+                    if class_name is class_case:
+                        preqs[class_name] = [list(pd.Series.dropna(pr[class_case]))]
+                        # print(preqs[class_name])
+                    else:
+                        # print(num)
+                        # print(list(pd.Series.dropna(pr[class_case])))
+                        preqs[class_name].append(list(pd.Series.dropna(pr[class_case])))
+                        preqs[class_name][num] = list(pd.Series.dropna(pr[class_case]))
+                preqs[class_name] = tuple(preqs[class_name])
+    for key in preqs:
+        print(preqs[key])
+    return preqs
+
+
+
 try:
     prereqdict = load_prerequisites(prereqfilename = prereqfilename)
 except FileNotFoundError:
@@ -129,6 +167,7 @@ except FileNotFoundError:
                   "ME7340": ("ME4010","ME6010"),
     #              "ME7350": ("ME5360"),
                   "ME7390": ("ME7500"),
+                  "ME7350": (),
                   "ME7400": ("ME4330","ME6330"),
                   "ME7500": (),# ["ME5320", "ME5750"]
     #              "ME7520": (["ME5310", "ME5750"]),
@@ -739,41 +778,7 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
 
 
 # load prerequisites.xlsx
-def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
-    pr = pd.io.excel.read_excel(prereqfilename)
-    preqs = dict()
-    for class_name in set(list(pr)):
-        # print(class_name)
-        if '.' not in class_name:
-            all_columns_with_class = [x for x in list(pr) if class_name in x]
-            # print(pr[class_name])
-            # print(len(list(pr[class_name])))
-            # print(all_columns_with_class)
-            if len(all_columns_with_class) is 1:
-                # print('hi')
-                # print(class_name)
-                # preqs[class_name] = pr[class_name]
-                # print(list(pd.Series.dropna(pr[class_name])))
-                preqs[class_name] = tuple([list(pd.Series.dropna(pr[class_name]))])
-                # print(preqs[class_name])
-                # print(preqs)
-            else:
-                for num, class_case in enumerate(all_columns_with_class):
-                    # print(num)
-                    # print(class_case)
-                    # print('.')
-                    if class_name is class_case:
-                        preqs[class_name] = [list(pd.Series.dropna(pr[class_case]))]
-                        # print(preqs[class_name])
-                    else:
-                        # print(num)
-                        # print(list(pd.Series.dropna(pr[class_case])))
-                        preqs[class_name].append(list(pd.Series.dropna(pr[class_case])))
-                        preqs[class_name][num] = list(pd.Series.dropna(pr[class_case]))
-                preqs[class_name] = tuple(preqs[class_name])
-    for key in preqs:
-        print(preqs[key])
-    return preqs
+
 
 
 
