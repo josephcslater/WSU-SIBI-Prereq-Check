@@ -1,4 +1,7 @@
 fswatch -e refined /Users/jslater/Public/SIBI/ | xargs  -n1 sh -c '/Users/jslater/anaconda/bin/python /Users/jslater/Documents/python-dev/WSU-SIBI-Prereq-Check/prereqcheck.py /Users/jslater/Public/SIBI/*'
 
+ (current version below)
+fswatch -e refined -e DS /Users/jslater/Public/SIBI/ --format \'%p\'| xargs -n1   /Users/jslater/Documents/python-dev/WSU-SIBI-Prereq-Check/prereqcheck.py
 
-fswatch -e refined -e DS /Users/jslater/Public/SIBI/ --format \'%p\'| xargs -n1   /Users/jslater/Documents/python-dev/WSU-SIBI-Prereq-Check/prereqcheck.py 
+
+https://stackoverflow.com/questions/6442364/running-script-upon-login-mac/13372744#13372744
