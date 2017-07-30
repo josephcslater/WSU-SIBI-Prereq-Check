@@ -1,0 +1,4 @@
+fswatch -e refined /Users/jslater/Public/SIBI/ | xargs  -n1 sh -c '/Users/jslater/anaconda/bin/python /Users/jslater/Documents/python-dev/WSU-SIBI-Prereq-Check/prereqcheck.py /Users/jslater/Public/SIBI/*'
+
+
+fswatch -e refined -e DS /Users/jslater/Public/SIBI/ --format \'%p\'| xargs -n1   /Users/jslater/Documents/python-dev/WSU-SIBI-Prereq-Check/prereqcheck.py 

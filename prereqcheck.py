@@ -1,4 +1,4 @@
-#! /opt/local/bin/python
+#! /Users/jslater/anaconda/bin/python
 
 import pandas as pd
 import numpy as np
@@ -710,7 +710,7 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     data.at['E List', 'Name'] = email_list
 
     #data.iat[18, 0] = 7
-    writer = pd.ExcelWriter(file_path + course_name + '_report.xlsx',  engine='xlsxwriter')
+    writer = pd.ExcelWriter(file_path + course_name + '_report_refined.xlsx',  engine='xlsxwriter')
     data.to_excel(writer, sheet_name = 'Both Campuses')
 
 
@@ -771,7 +771,7 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     #writer.sheets['Checks'].set_column('Name','Name',15)
     #writer.column_dimensions['Name'].width = 15
     writer.save()
-    print(file_path + course_name + '_report.xlsx written.')
+    print(file_path + course_name + '_report_refined.xlsx written.')
     tprint('\a')
     print('end')
     return data
@@ -807,6 +807,8 @@ for file in sys.argv:
         prereq_list()
     elif ".xlsx" not in file:
         print('{} is not a valid SIBI report. Wrong extension.'.format(file))
+    elif "refined" in file:
+        tprint('\n')
     else:
         tprint(file)
         tprint('**************')
