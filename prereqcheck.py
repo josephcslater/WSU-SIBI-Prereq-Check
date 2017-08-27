@@ -156,13 +156,14 @@ except FileNotFoundError:
                    "ME4620c"]),
                   "ME7060": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
                   "ME7080": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+                  "ME7100": ("ME3120"),
                   "ME7120": ("ME4120","ME6120"),
                   "ME7140": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
                   "ME7160": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
     #              "ME7200": ("ME5120"),
                   "ME7210": ("ME4210","ME6210"),
     #              "ME7250": ("ME5210"),
-    #              "ME7300": ("ME5350"),
+                  "ME7300": (),
                   "ME7330": (),#"ME5360"
                   "ME7340": ("ME4010","ME6010"),
     #              "ME7350": ("ME5360"),
@@ -177,7 +178,7 @@ except FileNotFoundError:
                   "ME7730": ("ME4700","ME6700"),
                   "ME7740": (),
                   "ME7750": ("ME4700","ME6700"),
-    #              "ME7760": ("ME5760"),
+                  "ME7760": (),
                   "ME7780": ("ME6730")}
 finally:
     print('')
@@ -477,6 +478,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
                 allprereqs = allprereqs[:-2]
                 allprereqs = ', or'.join([str(x) for x in prereqs])
             else:
+                data.loc[student, "Pre_req_status"] = None
                 tprint(prereqs)
                 allprereqs = prereqs
                 allprereqs = ', '.join([str(x) for x in allprereqs])
@@ -487,6 +489,8 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             email_list = email_list + ';' + \
                          data.loc[student, ["EmailAddress"]].values[0]
             tprint('=====================================================\n\n')
+        else:
+            data.loc[student, "Pre_req_status"] = None
     # print(email_list[1:])
     return data
 
@@ -677,7 +681,11 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
         data = data[cols]
 
     else:
-        data = data[data.Pre_req_status.notnull()]
+        try:
+            data = data[data.Pre_req_status.notnull()]
+        except AttributeError:
+            print(data)
+            print('No Pre_req_status for some reason.')
         cols = data.columns.tolist()
         cols = cols[:1] + cols[-1:] + cols[1:-1]
         data = data[cols]
