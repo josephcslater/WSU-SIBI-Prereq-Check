@@ -497,7 +497,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
 def read_prereq_report(filename):
     data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
-                         sheetname=0, converters={'PhoneNumber': str})
+                         sheet_name=0, converters={'PhoneNumber': str})
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
 
@@ -578,13 +578,13 @@ def flat_list(list):
 
 # Append transfered data to student record
 def append_transfer(data, student_list):
-    filename = "/Users/jslater/Documents/OneDriveBusiness/OneDrive - Wright State University/Chair-OneDrive/PrereqData/Student_prerequisite_data.xlsx"
+    filename = "/Users/jslater/Documents/OneDrive - Wright State University/Chair-OneDrive/PrereqData/Student_prerequisite_data.xlsx"
     while True:
         try:
             transfer_data = pd.read_excel(filename, index_col=0, skip_footer=1)
             break
         except IOError:
-            tprint("Oops!  Cannot find {}".format(filename))
+            print("Oops!  Cannot find {}".format(filename))
             filename = input("Try using the full path: ")
     tprint('\n\n*****************************************************************************')
     tprint("Transfer prerequisite file last modified: %s" %
