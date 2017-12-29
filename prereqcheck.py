@@ -87,7 +87,6 @@ def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
     return preqs
 
 
-
 try:
     prereqdict = load_prerequisites(prereqfilename = prereqfilename)
 except FileNotFoundError:
@@ -255,7 +254,7 @@ text_output = False
 
 
 # Hard coded toggling ot text output.
-def tprint(string, output = False):
+def tprint(string, output = True):
     #print(output)
     if output:
         print(string)
@@ -405,7 +404,7 @@ def satisfied_requirements(requirements, classes_taken, course_name):
 
 
 # Check if students in class meet prerequisites, report on failures
-
+# Loops through each student, updating data.
 
 def check_class(course_name, student_list, data, prereqs, no_transfer_data):
     print('=======================================================')
@@ -426,6 +425,9 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
         if satisfied is False:
             data.loc[student, "Pre_req_status"] = "Missing prereqs"
             tprint('Begin {}'.format(student))
+            print(data)
+            print('Prerequisite Failure')
+            print('********************')
             if student in no_transfer_data:
                 tprint(
                     'No transfer data for {}. ************************'.format(student))
@@ -457,6 +459,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             allprereqs = ''
             tprint('prereqs')
             tprint(prereqs)
+            # great place for a note to explain what this does. Dang it.
             if type(prereqs) is tuple:
                 tprint('growing list of prerequisites')
                 for idx, set_ in enumerate(prereqs):
@@ -478,7 +481,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
                 allprereqs = allprereqs[:-2]
                 allprereqs = ', or'.join([str(x) for x in prereqs])
             else:
-                data.loc[student, "Pre_req_status"] = None
+                # data.loc[student, "Pre_req_status"] = None
                 tprint(prereqs)
                 allprereqs = prereqs
                 allprereqs = ', '.join([str(x) for x in allprereqs])
@@ -491,7 +494,10 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             tprint('=====================================================\n\n')
         else:
             data.loc[student, "Pre_req_status"] = None
-    # print(email_list[1:])
+    print('Data after prereq checking')
+    print(data)# print(email_list[1:])
+    print('End Data after prereq checking')
+
     return data
 
 
@@ -500,6 +506,7 @@ def read_prereq_report(filename):
                          sheet_name=0, converters={'PhoneNumber': str})
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
+    Section_Number = data["CourseSectionNumber"].iloc[1][:-1]
 
     num_prereqs = 0
     keep_cols = ['Name', 'EmailAddress', 'PhoneNumber', 'ProgramDescription',
@@ -644,6 +651,11 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     data, no_transfer_data = append_transfer(data, student_list)
     data = check_class(course_name, student_list,
                        data, prereqs, no_transfer_data)
+    print('All data before write 1')
+    print(data)
+    print('^^^^^^^^^^^^^^^^')
+
+
     if course_name in majordict:
         data = check_majors(majordict[course_name], data, student_list)
 
@@ -715,12 +727,17 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     original_columns = list(data)
     data = data.append(df2)
     data = data[original_columns]
+
     data.at['E List', 'Name'] = email_list
 
     #data.iat[18, 0] = 7
-    writer = pd.ExcelWriter(file_path + course_name + '_report_refined.xlsx',  engine='xlsxwriter')
-    data.to_excel(writer, sheet_name = 'Both Campuses')
 
+    # Write data to excel spreadsheet
+    writer = pd.ExcelWriter(file_path + course_name + Section_Number +
+                            '_report_refined.xlsx',  engine='xlsxwriter')
+    data.to_excel(writer, sheet_name = 'Both Campuses')
+    print('All data before write')
+    print(data)
 
 #   Create Dayton Sheet
     data_Dayton = data[data['CourseSectionNumber'].str.contains('W')==False]
