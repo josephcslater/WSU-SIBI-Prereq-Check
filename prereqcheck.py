@@ -425,7 +425,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
         if satisfied is False:
             data.loc[student, "Pre_req_status"] = "Missing prereqs"
             tprint('Begin {}'.format(student))
-            print(data)
+            # print(data)
             print('Prerequisite Failure')
             print('********************')
             if student in no_transfer_data:
@@ -495,7 +495,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
         else:
             data.loc[student, "Pre_req_status"] = None
     print('Data after prereq checking')
-    print(data)# print(email_list[1:])
+    # print(data)# print(email_list[1:])
     print('End Data after prereq checking')
 
     return data
@@ -507,7 +507,8 @@ def read_prereq_report(filename):
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
     Section_Number = data["CourseSectionNumber"].iloc[1][:-1]
-
+    print(Section_Number)
+    print('*****************')
     num_prereqs = 0
     keep_cols = ['Name', 'EmailAddress', 'PhoneNumber', 'ProgramDescription',
                  'PrimaryAdvisorNameLFMI', 'CourseSectionNumber']
@@ -548,7 +549,7 @@ def read_prereq_report(filename):
         all_preqs.append(pre_reqs_taken)
     data['Pre_req_dic'] = all_preqs
 
-    return data, student_list, Course_Name
+    return data, student_list, Course_Name, Section_Number
 
 
 def prereq_list(prereqdict = prereqdict):
@@ -642,7 +643,7 @@ def check_majors(major_requirement, data, student_list):
 
 
 def check_report(filename, prereqdict=prereqdict, majordict=majordict):
-    data, student_list, course_name = read_prereq_report(filename)
+    data, student_list, course_name, Section_Number = read_prereq_report(filename)
     tprint(filename)
     # print(data)
     file_path =  filename[:filename.rfind('/')+1]
@@ -652,7 +653,7 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     data = check_class(course_name, student_list,
                        data, prereqs, no_transfer_data)
     print('All data before write 1')
-    print(data)
+    # print(data)
     print('^^^^^^^^^^^^^^^^')
 
 
@@ -696,7 +697,7 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
         try:
             data = data[data.Pre_req_status.notnull()]
         except AttributeError:
-            print(data)
+            # print(data)
             print('No Pre_req_status for some reason.')
         cols = data.columns.tolist()
         cols = cols[:1] + cols[-1:] + cols[1:-1]
@@ -737,7 +738,7 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
                             '_report_refined.xlsx',  engine='xlsxwriter')
     data.to_excel(writer, sheet_name = 'Both Campuses')
     print('All data before write')
-    print(data)
+    # print(data)
 
 #   Create Dayton Sheet
     data_Dayton = data[data['CourseSectionNumber'].str.contains('W')==False]
