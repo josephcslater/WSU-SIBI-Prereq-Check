@@ -287,7 +287,7 @@ def isbetterthan(grade_needed, grade_received):
 # Check if single course was passed
 
 def passed_class(class_name, classes_taken, course_name):
-    '''
+    """
     class_name is a string of the course a student must pass to
     complete the prerequisites.
 
@@ -315,7 +315,7 @@ def passed_class(class_name, classes_taken, course_name):
     Third: if there is no dash but there is a c (elif), log the course as a corequisite.
         All we have to do is look to see if they are taking it now.
         If no, did they take it in the past and get at least a D
-   '''
+   """
 
     if '-' in class_name:
         grade_required = class_name[-1]
@@ -366,11 +366,11 @@ def passed_class(class_name, classes_taken, course_name):
 
 
 def pass_all(classes, classes_taken, course_name):
-    '''
+    """
     classes is an array of all classes a student must pass to
     complete the prerequisites. If the grade received is not sufficient in any
     course, this function must return a False
-    '''
+    """
 
     answer = True
     for class_name in classes:
@@ -463,12 +463,12 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             if type(prereqs) is tuple:
                 tprint('growing list of prerequisites')
                 for idx, set_ in enumerate(prereqs):
-                    '''print('all prereqs')
+                    """print('all prereqs')
                     print(allprereqs)
                     print('set_')
                     print(set_)
                     print(type(set_))
-                    print(type(str(set_)))'''
+                    print(type(str(set_)))"""
                     if type(set_) is list:
                         for indiv_course in set_:
                             allprereqs = allprereqs + indiv_course + ', '
@@ -553,14 +553,14 @@ def read_prereq_report(filename):
 
 
 def prereq_list(prereqdict = prereqdict):
-    '''prereq_list()'''
+    """prereq_list()"""
     for i in prereqdict:
         print(i + ':' + ' ' + flat_list(prereqdict[i]))
 
 def flat_list(list):
-    '''outlist = flat_list(prereqdict["ME2120"])
+    """outlist = flat_list(prereqdict["ME2120"])
     print(outlist)
-    will list the unique prerequisites of ME2120 according to the dictionary'''
+    will list the unique prerequisites of ME2120 according to the dictionary"""
     out = ''
     if type(list) is str:
         if list[-1] is 'c':
@@ -682,12 +682,12 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
         else:
             data = data
 
-        '''
+        """
         try:
             data = data[data.Major.notnull() or data.Pre_req_status.notnull()]
         except ValueError:
             data = data[data.Pre_req_status.notnull()]
-        '''
+        """
 
         cols = data.columns.tolist()
         cols = cols[:1] + cols[-2:] + cols[1:-2]
