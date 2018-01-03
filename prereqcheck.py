@@ -507,7 +507,7 @@ def read_prereq_report(filename):
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
     Section_Number = data["CourseSectionNumber"].iloc[1][:-1]
-    print(Section_Number)
+    print('Course {}, section {}.'.format(Course_Name,Section_Number))
     print('*****************')
     num_prereqs = 0
     keep_cols = ['Name', 'EmailAddress', 'PhoneNumber', 'ProgramDescription',
@@ -734,7 +734,7 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     #data.iat[18, 0] = 7
 
     # Write data to excel spreadsheet
-    writer = pd.ExcelWriter(file_path + course_name + Section_Number +
+    writer = pd.ExcelWriter(file_path + course_name + '-' + Section_Number +
                             '_report_refined.xlsx',  engine='xlsxwriter')
     data.to_excel(writer, sheet_name = 'Both Campuses')
     print('All data before write')
