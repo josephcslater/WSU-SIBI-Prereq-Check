@@ -1,13 +1,11 @@
 #! /Users/jslater/anaconda/bin/python
 
 import pandas as pd
-import numpy as np
-import math
 import os.path
 import time
 import sys
-import re
 import os
+import collections
 
 # check_report is the function that can be fed a filename and prereqdict
 # to print out prereq test results.
@@ -47,19 +45,22 @@ import os
 # print('capstone design')
 # print('ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
 
+try:
+    from prereq_config import *
+    print('Prerequisites definied in {}'.format(prereqfilename))
+except ModuleNotFoundError:
+    print('ModuleNotFoundError')
+    print('prereq_config.xlsx not found.')
 
-from prereq_config import *
 
 def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
+    """Load prerequisite definitions for all program courses."""
     pr = pd.io.excel.read_excel(prereqfilename)
     preqs = dict()
     for class_name in set(list(pr)):
         # print(class_name)
         if '.' not in class_name:
             all_columns_with_class = [x for x in list(pr) if class_name in x]
-            # print(pr[class_name])
-            # print(len(list(pr[class_name])))
-            # print(all_columns_with_class)
             if len(all_columns_with_class) is 1:
                 # print('hi')
                 # print(class_name)
@@ -86,42 +87,58 @@ def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
         print(preqs[key])
     return preqs
 
-
+#  Loads prerequisites at time of loading module.
 try:
     prereqdict = load_prerequisites(prereqfilename = prereqfilename)
 except FileNotFoundError:
+    print("""Prerequisite definition file not found. Either this is ME or you
+             goofed.""")
     prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
-                  "ME2120": (["EGR1010", "ME1040", "PHY2400"], ["EGR1010", "ME2020", "PHY2400"], ["MTH2310", "ME1040", "PHY2400"], ["MTH2310", "ME2020", "PHY2400"]),
+                  "ME2120": (["EGR1010", "ME1040", "PHY2400"],
+                             ["EGR1010", "ME2020", "PHY2400"],
+                             ["MTH2310", "ME1040", "PHY2400"],
+                             ["MTH2310", "ME2020", "PHY2400"]),
                   "ME2210": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
-                  # This is a pre or co requisite. How to code? I think this works now.
+                  #  This is a pre or co requisite. How to code? I think this
+                  #  works now.
                   "ME2600": ("ME2700c"),  # Recitation is a co-requisite
                   "ME2700": (["CHM1210", "PHY2400"]),
                   "ME3120": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
-                  "ME3210": (["EE2010", "ME2210", "ME3120", "ME3350", "MTH2350"],["EE2010", "ME2210", "ME3120", "ME3350", "MTH2330", "MTH2530"]),  # Verified Aug-16-2016
+                  "ME3210": (["EE2010", "ME2210", "ME3120",
+                                        "ME3350", "MTH2350"],
+                             ["EE2010", "ME2210", "ME3120", "ME3350",
+                                        "MTH2330", "MTH2530"]), #  Verified Aug-16-2016
                   "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
                   "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
                   "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
                   "ME3360": (["ME3350", "MTH2350"],["ME3350", "MTH2350"]),  # Verified Aug-15-2016
-                  "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"],["EE2010", "EGR3350", "ME2120", "MTH2330", "MTH2530"]),
+                  "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"],
+                             ["EE2010", "EGR3350", "ME2120", "MTH2330", "MTH2530"]),
                   "ME3750": ("ME2700"),  # Verified Aug-15-2016
                   "ME3760": ("ME3750"),  # Verified Aug-15-2016
                   "ME4010": (["ME3360", "ME3210"]),  # Verified Aug-15-2016
-                  "ME4080": (["MTH2350", "ME3210"], ["MTH2330", "MTH2530", "ME3210"]),  # Verified Aug-16-2016
-                  "ME4120": (["MTH2320", "MTH2350", "ME3120"], ["MTH2320", "MTH2330", "MTH2530", "ME3120"]),
+                  "ME4080": (["MTH2350", "ME3210"],
+                             ["MTH2330", "MTH2530", "ME3210"]),  # Verified Aug-16-2016
+                  "ME4120": (["MTH2320", "MTH2350", "ME3120"],
+                             ["MTH2320", "MTH2330", "MTH2530", "ME3120"]),
                   "ME4140": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
                   "ME4150": ("ME4140"),  # Verified Aug-16-2016
-                  "ME4160": (["ME2020", "ME2210", "ME3120"], ["ME1040", "ME2210", "ME3120"]),
+                  "ME4160": (["ME2020", "ME2210", "ME3120"],
+                             ["ME1040", "ME2210", "ME3120"]),
                   "ME4180": ("ME2700"),  # Verified Aug-16-2016
-                  "ME4190": (["MTH2350", "MTH2320", "ME3350"], ["MTH2330", "MTH2530", "MTH2320", "ME3350"]),
+                  "ME4190": (["MTH2350", "MTH2320", "ME3350"],
+                             ["MTH2330", "MTH2530", "MTH2320", "ME3350"]),
                   "ME4210": ("ME3210"),  # Verified Aug-16-2016
                   "ME4220": ("ME3210"),
                   "ME4240": ("ME2210"),  # Verified Aug-16-2016
                   "ME4250": ("ME2210"),  # Verified Aug-16-2016
-                  "ME4260": (["MTH2350"], ["MTH2530", "MTH2530"]),
+                  "ME4260": (["MTH2350"],
+                             ["MTH2530", "MTH2530"]),
                   "ME4330": ("ME3350"),  # Verified Aug-16-2016
                   "ME4340": ("ME3360"),  # Verified Aug-16-2016
                   "ME4350": ("ME3350"),  # Verified Aug-16-2016
-                  "ME4360": (["ME3320", "ME3350", "MTH2350"], ["ME3320", "ME3350", "MTH2530","MTH2330"]),
+                  "ME4360": (["ME3320", "ME3350", "MTH2350"],
+                             ["ME3320", "ME3350", "MTH2530", "MTH2330"]),
                   "ME4430": ("ME3350"),  # Verified Aug-16-2016
                   "ME4440": ("ME3350"),  # Verified Aug-16-2016
                   "ME4490": ("ME3120"),  # Verified Aug-16-2016
@@ -136,7 +153,8 @@ except FileNotFoundError:
                   "ME4610": (["ME3360", "ME3600"]),  # Verified Aug-16-2016
                   "ME4620": (["ME2700", "ME3120", "ME3600"]),
                   "ME4680": (["CHM1210", "PHY2410"], ["CHM1210", "PHY1120"]),
-                  "ME4700": (["ME2700", "MTH2320", "MTH2350"],["ME2700", "MTH2320", "MTH2330", "MTH2530"]),
+                  "ME4700": (["ME2700", "MTH2320", "MTH2350"],
+                             ["ME2700", "MTH2320", "MTH2330", "MTH2530"]),
                   "ME4720": ("ME2700"),  # Verified Aug-16-2016
                   "ME4730": ("ME2700"),  # Verified Aug-16-2016
                   "ME4740": (["ME2700", "ME3120", "ME4620c"]),
@@ -149,96 +167,239 @@ except FileNotFoundError:
                   "ME4860": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
                   "ME4870": (["ME2210"], ["BME3212"], ["ISE3212"]),
                   "ME4880": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-                  "ME4910": (
-                  ["ME2020", "EGR3350", "MTH2320", "MTH2350", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
-                   "ME4620c"],["ME2020", "EGR3350", "MTH2320", "MTH2330", "MTH2530", "PHY2410", "EE2010", "ME2210", "ME2700", "ME3120", "ME3310",
-                   "ME4620c"]),
-                  "ME7060": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
-                  "ME7080": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+                  "ME4910": (["ME2020", "EGR3350", "MTH2320", "MTH2350",
+                                        "PHY2410", "EE2010", "ME2210",
+                                        "ME2700", "ME3120", "ME3310",
+                                        "ME4620c"],
+                             ["ME2020", "EGR3350", "MTH2320", "MTH2330",
+                                        "MTH2530", "PHY2410", "EE2010",
+                                        "ME2210", "ME2700", "ME3120", "ME3310",
+                                        "ME4620c"]),
+                  "ME7060": (["ME6120", "ME7100"],
+                             ["ME4120", "ME7100"]),
+                  "ME7080": (["ME6120", "ME7100"],
+                             ["ME4120", "ME7100"]),
                   "ME7100": ("ME3120"),
-                  "ME7120": ("ME4120","ME6120"),
-                  "ME7140": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
-                  "ME7160": (["ME6120", "ME7100"],["ME4120", "ME7100"]),
+                  "ME7120": ("ME4120", "ME6120"),
+                  "ME7140": (["ME6120", "ME7100"],
+                             ["ME4120", "ME7100"]),
+                  "ME7160": (["ME6120", "ME7100"],
+                             ["ME4120", "ME7100"]),
     #              "ME7200": ("ME5120"),
-                  "ME7210": ("ME4210","ME6210"),
+                  "ME7210": ("ME4210", "ME6210"),
     #              "ME7250": ("ME5210"),
                   "ME7300": (),
-                  "ME7330": (),#"ME5360"
-                  "ME7340": ("ME4010","ME6010"),
+                  "ME7330": (),  # "ME5360"
+                  "ME7340": ("ME4010", "ME6010"),
     #              "ME7350": ("ME5360"),
                   "ME7390": ("ME7500"),
                   "ME7350": (),
-                  "ME7400": ("ME4330","ME6330"),
-                  "ME7500": (),# ["ME5320", "ME5750"]
+                  "ME7400": ("ME4330", "ME6330"),
+                  "ME7500": (),  # ["ME5320", "ME5750"]
     #              "ME7520": (["ME5310", "ME5750"]),
                   "ME7550": ("ME7500"),
-                  "ME7690": ("ME4210","ME6210"),
-                  "ME7720": ("ME4720","ME6720"),#, "ME5750"
-                  "ME7730": ("ME4700","ME6700"),
+                  "ME7690": ("ME4210", "ME6210"),
+                  "ME7720": ("ME4720", "ME6720"),#, "ME5750"
+                  "ME7730": ("ME4700", "ME6700"),
                   "ME7740": (),
-                  "ME7750": ("ME4700","ME6700"),
+                  "ME7750": ("ME4700", "ME6700"),
                   "ME7760": (),
                   "ME7780": ("ME6730")}
 finally:
     print('')
 
 
-
-
 #print(prereqdict)
-import collections
+
 #print(collections.OrderedDict(sorted(prereqdict.items())))
 prereqdict = collections.OrderedDict(sorted(prereqdict.items()))
 
-majordict = {"ME4910": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME2700": ['Engineering - IECS', 'Materials Sci + Egr - BSMSE', 'Materials Sci + Egr - IECS',
+majordict = {"ME4910": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        "Materials Sci + Egr - Pre"],
+             "ME2700": ['Engineering - IECS', 'Materials Sci + Egr - BSMSE',
+                        'Materials Sci + Egr - IECS',
                         'Materials Sci + Egr - Pre',
-                        'Mathematics - BS', 'Mech Engineering - BSME', 'Mech Engineering - IECS',
+                        'Mathematics - BS', 'Mech Engineering - BSME',
+                        'Mech Engineering - IECS',
                         'Mech Engineering - Pre'],
-             "ME3210": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3320": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3350": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3360": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3600": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3610": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3750": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3760": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME3150": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4010": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4080": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4120": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4140": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4150": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4160": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4180": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4190": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4210": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4220": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4240": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4250": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4260": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4330": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4340": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4350": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4360": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4430": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4440": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4490": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4520": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4530": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4540": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4550": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4560": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4570": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4580": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4590": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4610": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4620": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4680": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4700": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4720": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4730": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
-             "ME4740": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE", 'Materials Sci + Egr - Pre'],
+             "ME3210": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3320": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3350": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3360": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3600": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3610": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3750": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3760": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME3150": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4010": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4080": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4120": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4140": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4150": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4160": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4180": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4190": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4210": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4220": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4240": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4250": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4260": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4330": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4340": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4350": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4360": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4430": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4440": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4490": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4520": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4530": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4540": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4550": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4560": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4570": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4580": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4590": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4610": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4620": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4680": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4700": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4720": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4730": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
+             "ME4740": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
+                        'Materials Sci + Egr - Pre'],
              "ME4750": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
                         'Materials Sci + Egr - Pre'],
              "ME4860": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
@@ -252,27 +413,30 @@ majordict = {"ME4910": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Ma
 text_output = False
 
 
-
 # Hard coded toggling ot text output.
-def tprint(string, output = True):
-    #print(output)
+def tprint(string, output=True):
+    #  print(output)
     if output:
         print(string)
 
 # This co-or-prequisite is hard-coded in passed_class
 co_or_preqdict = {"ME2600": ("ME2700")}
 
+
 def isC(grade):
     answer = grade == 'A' or grade == 'B' or grade == 'C'
     return answer
+
 
 def isD(grade):
     answer = grade == 'A' or grade == 'B' or grade == 'C' or grade == 'D'
     return answer
 
+
 def ispass(grade):
     answer = grade == 'A' or grade == 'B' or grade == 'C' or grade == 'D'
     return answer
+
 
 def isbetterthan(grade_needed, grade_received):
     if grade_needed == 'C':
@@ -280,24 +444,30 @@ def isbetterthan(grade_needed, grade_received):
     elif grade_needed == 'D':
         answer = isD(grade_received)
     else:
-        print("Warning: Grade needed isn't a real grade: {}.".format(grade_needed))
+        print("Warning: Grade needed isn't a real grade: {}."
+        .format(grade_needed))
         answer = 3
     return answer
 
-# Check if single course was passed
 
 def passed_class(class_name, classes_taken, course_name):
     """
+    Check if single course was passed.
+
     class_name is a string of the course a student must pass to
     complete the prerequisites.
 
-    class_name can have qualifiers within the string. - *letter* means that the required grade is *letter*.
-    For instance, ME2120-C means that a C grade is required to satisfy the prerequisite.
+    class_name can have qualifiers within the string. - *letter* means that the
+    required grade is *letter*.
+    For instance, ME2120-C means that a C grade is required to satisfy the
+    prerequisite.
 
     With a single letter c appended, it is allowable as a corequisite.
-    For instance, ME2700c means that ME 2700 must be taken as a prerequisite, or is allowable as a co-requisite.
+    For instance, ME2700c means that ME 2700 must be taken as a prerequisite,
+    or is allowable as a co-requisite.
 
-    Because it is nonsensical, it is not allowable to have a letter grade requirement and corequisite allowance.
+    Because it is nonsensical, it is not allowable to have a letter grade
+    requirement and corequisite allowance.
 
     If the grade received is not sufficient, this
     function must return a False
@@ -306,15 +476,17 @@ def passed_class(class_name, classes_taken, course_name):
     prerequisites for course_name
 
     -----------------------
-    class_name should now be parsed ahead of time with this logic rewritten to enable spcific grade requirements to be
-    embedded in the prerequisite dictionary.
+    class_name should now be parsed ahead of time with this logic rewritten to
+    enable spcific grade requirements to be embedded in the prerequisite
+    dictionary.
 
     First: look for a -
     Second: if there is a dash, split out the course name and grade required
-        Now the grade can be checked with the answer (satisfied) returned in answer)
-    Third: if there is no dash but there is a c (elif), log the course as a corequisite.
-        All we have to do is look to see if they are taking it now.
-        If no, did they take it in the past and get at least a D
+        Now the grade can be checked with the answer (satisfied) returned in
+        answer)
+    Third: if there is no dash but there is a c (elif), log the course as a
+        corequisite. All we have to do is look to see if they are taking it
+        now. If no, did they take it in the past and get at least a D
    """
 
     if '-' in class_name:
@@ -323,20 +495,19 @@ def passed_class(class_name, classes_taken, course_name):
     else:
         grade_required = 'd'
 
-
-
-    co_or_preqdict = {"ME2600": ("ME2700")}
+    #  co_or_preqdict = {"ME2600": ("ME2700")}
     fail_text = ''
     answer = False
     if class_name in classes_taken:
 
-#        if class_name is "ME2120" or class_name is "ME3310" or class_name is "ME2700":
+#        if class_name is "ME2120" or class_name is "ME3310" or class_name is
+#        "ME2700":
         if grade_required is 'c' or grade_required is 'C':
             answer = isC(classes_taken[class_name])
         # I hate this hard coding of co-requisite exception. I believe it is
         # now fixed, but this is left in just in case.
         # Below was a co-req hard code before the appendage of c worked.
-        #elif course_name is "ME2600" and class_name is "ME2700":
+        # elif course_name is "ME2600" and class_name is "ME2700":
         #    answer = True
         else:
             answer = isD(classes_taken[class_name])
@@ -351,10 +522,21 @@ def passed_class(class_name, classes_taken, course_name):
                 # print('Failed {} with grade of {}'.format(class_name, classes_taken[class_name] ))
                 fail_text = 'Failed {} with grade of {}\n.'.format(
                     class_name, classes_taken[class_name])
+
+    #  This needs to be simplified and explained. Unreadable what it does.
+    is_coreq = class_name[:class_name.find('c')] in classes_taken
+    is_coreq_regd = classes_taken[class_name[:class_name.find('c')]] == '>'
+    is_class_passed = passed_class(class_name[:class_name.find('c')],
+                                   classes_taken, course_name)[0]
+
+    elif (is_coreq and is_coreq_regd) or (is_coreq and is_class_passed)
+
+    """ old elif command
     elif (class_name[:class_name.find('c')] in classes_taken # this long test is for co-requisites
           and classes_taken[class_name[:class_name.find('c')]] == '>') or (class_name[:class_name.find('c')]
                                                                            in classes_taken and passed_class(
         class_name[:class_name.find('c')], classes_taken, course_name)[0]):  # corequisite taken earlier and passed?
+    """
         answer = True
     else:
         # print('Has not taken {}.'.format(class_name ))
@@ -362,23 +544,23 @@ def passed_class(class_name, classes_taken, course_name):
     return answer, fail_text
 
 
-# Check array of classes to return if all have been passed (sufficiently)
-
-
 def pass_all(classes, classes_taken, course_name):
     """
+    Check if passed all required prerequisite courses.
+
     classes is an array of all classes a student must pass to
     complete the prerequisites. If the grade received is not sufficient in any
     course, this function must return a False
-    """
 
+    """
     answer = True
     for class_name in classes:
         answer, fail_text = passed_class(
             class_name, classes_taken, course_name)
         if not answer:
             answer = False
-            # print('Failed {} with grade of {}'.format(class_name, classes_taken[class_name] ))
+            # print('Failed {} with grade of {}'.format(class_name,
+            # classes_taken[class_name] ))
             break
     return answer
 
@@ -407,6 +589,8 @@ def satisfied_requirements(requirements, classes_taken, course_name):
 # Loops through each student, updating data.
 
 def check_class(course_name, student_list, data, prereqs, no_transfer_data):
+    """Check for each student whether they have satisfied prerequisites."""
+
     print('=======================================================')
     print('=======================================================')
     print('Start report for:')
@@ -502,6 +686,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
 
 def read_prereq_report(filename):
+    """Read SIBI report file."""
     data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
                          sheet_name=0, converters={'PhoneNumber': str})
     Course_Name = data["CourseGrade"].iloc[1]
@@ -535,9 +720,9 @@ def read_prereq_report(filename):
                 grade_str = data.loc[student].iloc[i + 1]
                 # grade string parsing
                 if data.loc[student].iloc[i + 1].find(';') == -1:
-                    if grade_str[-1] == 'R': # AP Credit listed as "CR"
+                    if grade_str[-1] == 'R':  # AP Credit listed as "CR"
                         grade = grade_str[-2]
-                    else: # Transfer credit ends without ';', listed at TC
+                    else:  # Transfer credit ends without ';', listed at TC
                         grade = grade_str[-1]
                 else:
                     grade = grade_str[
@@ -585,8 +770,11 @@ def flat_list(list):
 
 
 # Append transfered data to student record
-def append_transfer(data, student_list):
+def append_transfer(data, student_list, transfer_filename):
+    """Add transfer acceptances to SIBI reported grades."""
+
     filename = "/Users/jslater/Documents/OneDrive - Wright State University/Chair-OneDrive/PrereqData/Student_prerequisite_data.xlsx"
+    filename = transfer_filename
     while True:
         try:
             transfer_data = pd.read_excel(filename, index_col=0, skip_footer=1)
@@ -642,20 +830,21 @@ def check_majors(major_requirement, data, student_list):
     return data
 
 
-def check_report(filename, prereqdict=prereqdict, majordict=majordict):
+def check_report(filename, prereqdict=prereqdict, majordict=majordict
+                 transfer_filename=transfer_filename):
     data, student_list, course_name, Section_Number = read_prereq_report(filename)
     tprint(filename)
     # print(data)
-    file_path =  filename[:filename.rfind('/')+1]
+    file_path = filename[:filename.rfind('/')+1]
     tprint(file_path)
     prereqs = prereqdict[course_name]
-    data, no_transfer_data = append_transfer(data, student_list)
+    data, no_transfer_data = append_transfer(data, student_list,
+                                                   transfer_filename)
     data = check_class(course_name, student_list,
                        data, prereqs, no_transfer_data)
     print('All data before write 1')
     # print(data)
     print('^^^^^^^^^^^^^^^^')
-
 
     if course_name in majordict:
         data = check_majors(majordict[course_name], data, student_list)
@@ -764,7 +953,6 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     data_Dayton.to_excel(writer, sheet_name = 'Dayton Campus')
 
 
-
 #   Create Lake Sheet
     data_Lake = data[data['CourseSectionNumber'].str.contains('W')==True]
     email_list = ''
@@ -788,14 +976,10 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
     data_Lake.at['E List', 'Name'] = email_list
     data_Lake.to_excel(writer, sheet_name = 'Lake Campus')
 
-
-
-
-
-    #writer.sheets['Checks'].column_dimensions['Name'].width = 15
-    #help(writer.sheets['Checks'].set_column)
-    #writer.sheets['Checks'].set_column('Name','Name',15)
-    #writer.column_dimensions['Name'].width = 15
+    # writer.sheets['Checks'].column_dimensions['Name'].width = 15
+    # help(writer.sheets['Checks'].set_column)
+    # writer.sheets['Checks'].set_column('Name','Name',15)
+    # writer.column_dimensions['Name'].width = 15
     writer.save()
     print(file_path + course_name + '_report_refined.xlsx written.')
     tprint('\a')
@@ -804,15 +988,9 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict):
 
 
 # load prerequisites.xlsx
-
-
-
-
-
-
 # ! /usr/bin/env python
 
-"Find string in file, show file name, line number, and line"
+# "Find string in file, show file name, line number, and line"
 
 os.environ['PATH'] = os.path.normpath(
     os.environ['PATH'] + ':opt.local/bin:/usr/texbin:/usr/local/bin:/usr/bin:/bin:')
@@ -838,6 +1016,6 @@ for file in sys.argv:
     else:
         tprint(file)
         tprint('**************')
-        data = check_report(file, prereqdict, majordict)
+        data = check_report(file, prereqdict, majordict, transfer_filename)
 
         # print(data)
