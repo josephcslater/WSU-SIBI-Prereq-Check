@@ -7,6 +7,7 @@ import sys
 import os
 import collections
 
+prereqfilename = 'prerequisites.xlsx'
 # check_report is the function that can be fed a filename and prereqdict
 # to print out prereq test results.
 
@@ -62,24 +63,12 @@ def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
         if '.' not in class_name:
             all_columns_with_class = [x for x in list(pr) if class_name in x]
             if len(all_columns_with_class) is 1:
-                # print('hi')
-                # print(class_name)
-                # preqs[class_name] = pr[class_name]
-                # print(list(pd.Series.dropna(pr[class_name])))
                 preqs[class_name] = tuple([list(pd.Series.dropna(pr[class_name]))])
-                # print(preqs[class_name])
-                # print(preqs)
             else:
                 for num, class_case in enumerate(all_columns_with_class):
-                    # print(num)
-                    # print(class_case)
-                    # print('.')
                     if class_name is class_case:
                         preqs[class_name] = [list(pd.Series.dropna(pr[class_case]))]
-                        # print(preqs[class_name])
                     else:
-                        # print(num)
-                        # print(list(pd.Series.dropna(pr[class_case])))
                         preqs[class_name].append(list(pd.Series.dropna(pr[class_case])))
                         preqs[class_name][num] = list(pd.Series.dropna(pr[class_case]))
                 preqs[class_name] = tuple(preqs[class_name])
@@ -88,6 +77,7 @@ def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
     return preqs
 
 #  Loads prerequisites at time of loading module.
+print('Loading prerequisites from {}.'.format(prereqfilename))
 try:
     prereqdict = load_prerequisites(prereqfilename = prereqfilename)
 except FileNotFoundError:
@@ -524,19 +514,19 @@ def passed_class(class_name, classes_taken, course_name):
                     class_name, classes_taken[class_name])
 
     #  This needs to be simplified and explained. Unreadable what it does.
-    is_coreq = class_name[:class_name.find('c')] in classes_taken
-    is_coreq_regd = classes_taken[class_name[:class_name.find('c')]] == '>'
-    is_class_passed = passed_class(class_name[:class_name.find('c')],
-                                   classes_taken, course_name)[0]
+    #  is_coreq = class_name[:class_name.find('c')] in classes_taken
+    #  is_coreq_regd = classes_taken[class_name[:class_name.find('c')]] == '>'
+    #  is_class_passed = passed_class(class_name[:class_name.find('c')],
+    #                               classes_taken, course_name)[0]
 
-    elif (is_coreq and is_coreq_regd) or (is_coreq and is_class_passed)
+    # elif (is_coreq and is_coreq_regd) or (is_coreq and is_class_passed):
 
-    """ old elif command
+    # old elif command
     elif (class_name[:class_name.find('c')] in classes_taken # this long test is for co-requisites
           and classes_taken[class_name[:class_name.find('c')]] == '>') or (class_name[:class_name.find('c')]
                                                                            in classes_taken and passed_class(
         class_name[:class_name.find('c')], classes_taken, course_name)[0]):  # corequisite taken earlier and passed?
-    """
+    #
         answer = True
     else:
         # print('Has not taken {}.'.format(class_name ))
@@ -830,7 +820,7 @@ def check_majors(major_requirement, data, student_list):
     return data
 
 
-def check_report(filename, prereqdict=prereqdict, majordict=majordict
+def check_report(filename, prereqdict=prereqdict, majordict=majordict,
                  transfer_filename=transfer_filename):
     data, student_list, course_name, Section_Number = read_prereq_report(filename)
     tprint(filename)
