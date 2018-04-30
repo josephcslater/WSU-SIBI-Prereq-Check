@@ -8,16 +8,16 @@
    - When it asks you where to put it, put it in your documents folder, or a reasonable subfolder **that you will remember**.
 3. [Install Python](https://www.anaconda.com/download/)
    - You should see a big green button under *Python 3.6 version*. Click it and agree to all of it.
-4. Please look at the prerequisites.xlsx file.
+4. Please edit the prerequisites.xlsx file.
    - Each column header is the name of the course, each row below is a required prerequisite. If  prerequisites can be satisfied multiple ways, add more columns for the course (as per the example... which is a ficticious example).
-   - You should likely name it EE_prerequisites.xlsx or such. Whatever you name it will have to be put into the notebook file.
-   - This excel file will need to be in the same folder as the script to run for now.
+      - Each column represents a different way to satisfy the prerequisites.
+   - You should likely name it EE_prerequisites.xlsx or such. Whatever you name it, leave it where it is. No changing after I visit to set up.
 5.  Create a transfer spreadsheet
-    - This spreadsheet needs to be obtained directly from me as my baseline contains FERPA information
+    - An example is given as Student_prerequisite_data_Example.xlsx
     - This spreadsheet allows you to note that you've agreed that a course requirement has been completed **for the sake of satisfying prerequisites**.
     - This is useful when considering transfer students whose transcripts have yet to post so that you avoid false warnings.
 
-This won't complete the process, I will have to:
+## This won't complete the process, I will have to:
 
 - Install the package that you downloaded
 - Run the notebook and configure to your settings
