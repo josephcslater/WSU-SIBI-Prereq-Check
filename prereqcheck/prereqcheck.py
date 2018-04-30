@@ -6,6 +6,13 @@ import time
 import sys
 import os
 import collections
+import logging
+
+logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.DEBUG)
+logging.debug('This message should go to the console')
+logging.info('So should this')
+logging.warning('And this, too')
 
 prereqfilename = 'prerequisites.xlsx'
 # check_report is the function that can be fed a filename and prereqdict
