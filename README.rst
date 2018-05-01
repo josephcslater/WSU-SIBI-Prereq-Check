@@ -8,7 +8,11 @@ You need to:
 
    -  You don’t need to make an account (anymore)
 
-2. `Clone this repository <https://github.com/josephcslater/WSU-SIBI-Prereq-Check>`_ (Just click on `this link`_)
+2. Clone this repository:
+
+   -  See the **green button** a couple inches below the top right of this page.
+
+   -  Click it and select "Open in Desktop"
 
    -  When it asks you where to put it, put it in your documents folder,
       or a reasonable subfolder **that you will remember**.
