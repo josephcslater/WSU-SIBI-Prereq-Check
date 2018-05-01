@@ -73,4 +73,4 @@ However, doing all of the above will mean that we won’t have to wait
 while I do the above things for you (or worse, we don’t have the files
 ready and I have to come back later.).
 
-.. _this link: x-github-client://openRepo/https://github.com/josephcslater/WSU-SIBI-Prereq-Check
+.. _`this link`: x-github-client://openRepo/https://github.com/josephcslater/WSU-SIBI-Prereq-Check
