@@ -10,7 +10,7 @@ You need to:
 
 2. `Clone this
    repository <x-github-client://openRepo/https://github.com/josephcslater/WSU-SIBI-Prereq-Check>`_
-   (Just click on `this link`)
+   (Just click on `this link`__)
 
    -  When it asks you where to put it, put it in your documents folder,
       or a reasonable subfolder **that you will remember**.
