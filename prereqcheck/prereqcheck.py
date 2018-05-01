@@ -15,9 +15,9 @@ logging.info('So should this')
 logging.warning('And this, too')
 
 prereqfilename = 'prerequisites.xlsx'
+transfer_filename = "/Users/jslater/Documents/OneDrive - Wright State University/Chair-OneDrive/PrereqData/Student_prerequisite_data.xlsx"
 # check_report is the function that can be fed a filename and prereqdict
 # to print out prereq test results.
-
 
 # Course prerequisites are defined in one of three ways that handles all cases
 # All course names must be in parentheses (sorry!) ans with no spaces
@@ -57,7 +57,7 @@ try:
     from prereq_config import *
     print('Prerequisites definied in {}'.format(prereqfilename))
 except ModuleNotFoundError:
-    print('ModuleNotFoundError')
+    # print('ModuleNotFoundError')
     print('prereq_config.xlsx not found.')
 
 
@@ -88,8 +88,8 @@ print('Loading prerequisites from {}.'.format(prereqfilename))
 try:
     prereqdict = load_prerequisites(prereqfilename = prereqfilename)
 except FileNotFoundError:
-    print("""Prerequisite definition file not found. Either this is ME or you
-             goofed.""")
+    print("Prerequisite definition file not found. ",
+          "Either this is ME or you goofed.")
     prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
                   "ME2120": (["EGR1010", "ME1040", "PHY2400"],
                              ["EGR1010", "ME2020", "PHY2400"],
@@ -829,6 +829,10 @@ def check_majors(major_requirement, data, student_list):
 
 def check_report(filename, prereqdict=prereqdict, majordict=majordict,
                  transfer_filename=transfer_filename):
+    """
+
+
+    """
     data, student_list, course_name, Section_Number = read_prereq_report(filename)
     tprint(filename)
     # print(data)
@@ -994,7 +998,7 @@ os.environ['PATH'] = os.path.normpath(
 str2find = sys.argv[-1]
 
 # print(sys.argv[1])
-
+"""
 for file in sys.argv:
     # print(file[-2:])
     cwd = os.getcwd()
@@ -1014,5 +1018,5 @@ for file in sys.argv:
         tprint(file)
         tprint('**************')
         data = check_report(file, prereqdict, majordict, transfer_filename)
-
+"""
         # print(data)
