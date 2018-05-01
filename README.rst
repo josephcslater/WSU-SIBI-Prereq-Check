@@ -35,13 +35,13 @@ You need to:
 
    For example, the Excel file contains the following:
 
-   ======= ======= ======
-   ME2120  ME2120  ME3120
-   ======= ======= ======
-   EGR1010 MTH1234 ME2120
-   ME1040
-   ======= ======= ======
-
+   +---------+---------+--------+
+   | ME2120  | ME2120  | ME3120 |
+   +=========+=========+========+
+   | EGR1010 | MTH1234 | ME2120 |
+   +---------+---------+--------+
+   | ME1040  |         |        |
+   +---------+---------+--------+
 
    This means that there are two ways to satisfy the prerequisites for
    ME2120 (**no space allowed**): Either MTH234 or (ME1040 and EGR1010).
