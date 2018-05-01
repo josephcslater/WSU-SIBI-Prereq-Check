@@ -21,14 +21,13 @@ You need to:
    -  You should see a big green button under *Python 3.6 version*.
       Click it and agree to all of it.
 
-4. Please edit the prerequisites.xlsx file.
+4. Please edit the ``prerequisites.xlsx`` file.
 
    -  Each column header is the name of the course, each row below is a
       required prerequisite. If prerequisites can be satisfied multiple
       ways, add more columns for the course (as per the example… which
-      is a ficticious example).
-   -  Each column represents a different way to satisfy the
-      prerequisites.
+      is a fictitious example).
+   -  Each column represents a different way to satisfy the prerequisites.
    -  You should likely name it EE_prerequisites.xlsx or such. Whatever
       you name it, leave it where it is. No changing after I visit to
       set up.
@@ -46,16 +45,16 @@ You need to:
    This means that there are two ways to satisfy the prerequisites for
    ME2120 (**no space allowed**): Either MTH234 or (ME1040 and EGR1010).
    There is one way to satisfy the prerequisites for ME3120: ME2120.
-5. Create a \`transfer’ spreadsheet
+5. Create a transfer spreadsheet
 
    -  This is useful for
 
-      -  Temporary acknowledgment of prerequisite fullfillment prior to
+      -  Temporary acknowledgment of prerequisite fulfillment prior to
          transfer credits being posted
       -  Graduate students who don’t have undergraduate courses
-         transfered and evaluated formally.
+         transferred and evaluated formally.
 
-   -  An example is given as Student_prerequisite_data_Example.xlsx
+   -  An example is given as ``Student_prerequisite_data_Example.xlsx``
    -  This spreadsheet allows you to note that you’ve agreed that a
       course requirement has been completed **for the sake of satisfying
       prerequisites**.
