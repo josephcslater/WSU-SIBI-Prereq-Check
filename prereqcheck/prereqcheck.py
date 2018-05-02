@@ -8,11 +8,11 @@ import os
 import collections
 import logging
 
-logging.basicConfig(level=logging.WARNING)
+# logging.basicConfig(level=logging.WARNING)
 logging.basicConfig(level=logging.DEBUG)
 logging.debug('This message should go to the console')
 logging.info('So should this')
-logging.warning('And this, too')
+# logging.warning('And this, too')
 
 prereqfilename = 'prerequisites.xlsx'
 transfer_filename = "/Users/jslater/Documents/OneDrive - Wright State University/Chair-OneDrive/PrereqData/Student_prerequisite_data.xlsx"
@@ -55,13 +55,13 @@ transfer_filename = "/Users/jslater/Documents/OneDrive - Wright State University
 
 try:
     from prereq_config import *
-    print('Prerequisites definied in {}'.format(prereqfilename))
+    print('Prerequisites defined in {}'.format(prereqfilename))
 except ModuleNotFoundError:
     # print('ModuleNotFoundError')
     print('prereq_config.xlsx not found.')
 
 
-def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
+def __load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
     """Load prerequisite definitions for all program courses."""
     pr = pd.io.excel.read_excel(prereqfilename)
     preqs = dict()
@@ -83,134 +83,135 @@ def load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
         print(preqs[key])
     return preqs
 
+
 #  Loads prerequisites at time of loading module.
-print('Loading prerequisites from {}.'.format(prereqfilename))
-try:
-    prereqdict = load_prerequisites(prereqfilename = prereqfilename)
-except FileNotFoundError:
-    print("Prerequisite definition file not found. ",
-          "Either this is ME or you goofed.")
-    prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
-                  "ME2120": (["EGR1010", "ME1040", "PHY2400"],
-                             ["EGR1010", "ME2020", "PHY2400"],
-                             ["MTH2310", "ME1040", "PHY2400"],
-                             ["MTH2310", "ME2020", "PHY2400"]),
-                  "ME2210": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
-                  #  This is a pre or co requisite. How to code? I think this
-                  #  works now.
-                  "ME2600": ("ME2700c"),  # Recitation is a co-requisite
-                  "ME2700": (["CHM1210", "PHY2400"]),
-                  "ME3120": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
-                  "ME3210": (["EE2010", "ME2210", "ME3120",
-                                        "ME3350", "MTH2350"],
-                             ["EE2010", "ME2210", "ME3120", "ME3350",
-                                        "MTH2330", "MTH2530"]), #  Verified Aug-16-2016
-                  "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
-                  "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
-                  "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
-                  "ME3360": (["ME3350", "MTH2350"],["ME3350", "MTH2350"]),  # Verified Aug-15-2016
-                  "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"],
-                             ["EE2010", "EGR3350", "ME2120", "MTH2330", "MTH2530"]),
-                  "ME3750": ("ME2700"),  # Verified Aug-15-2016
-                  "ME3760": ("ME3750"),  # Verified Aug-15-2016
-                  "ME4010": (["ME3360", "ME3210"]),  # Verified Aug-15-2016
-                  "ME4080": (["MTH2350", "ME3210"],
-                             ["MTH2330", "MTH2530", "ME3210"]),  # Verified Aug-16-2016
-                  "ME4120": (["MTH2320", "MTH2350", "ME3120"],
-                             ["MTH2320", "MTH2330", "MTH2530", "ME3120"]),
-                  "ME4140": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
-                  "ME4150": ("ME4140"),  # Verified Aug-16-2016
-                  "ME4160": (["ME2020", "ME2210", "ME3120"],
-                             ["ME1040", "ME2210", "ME3120"]),
-                  "ME4180": ("ME2700"),  # Verified Aug-16-2016
-                  "ME4190": (["MTH2350", "MTH2320", "ME3350"],
-                             ["MTH2330", "MTH2530", "MTH2320", "ME3350"]),
-                  "ME4210": ("ME3210"),  # Verified Aug-16-2016
-                  "ME4220": ("ME3210"),
-                  "ME4240": ("ME2210"),  # Verified Aug-16-2016
-                  "ME4250": ("ME2210"),  # Verified Aug-16-2016
-                  "ME4260": (["MTH2350"],
-                             ["MTH2530", "MTH2530"]),
-                  "ME4330": ("ME3350"),  # Verified Aug-16-2016
-                  "ME4340": ("ME3360"),  # Verified Aug-16-2016
-                  "ME4350": ("ME3350"),  # Verified Aug-16-2016
-                  "ME4360": (["ME3320", "ME3350", "MTH2350"],
-                             ["ME3320", "ME3350", "MTH2530", "MTH2330"]),
-                  "ME4430": ("ME3350"),  # Verified Aug-16-2016
-                  "ME4440": ("ME3350"),  # Verified Aug-16-2016
-                  "ME4490": ("ME3120"),  # Verified Aug-16-2016
-                  "ME4520": ("ME3350"),  # Verified Aug-16-2016
-                  "ME4530": ("ME3310"),  # Verified Aug-16-2016
-                  "ME4540": ("ME3360"),  # Verified Aug-16-2016
-                  "ME4550": ("ME3360"),  # Verified Aug-16-2016
-                  "ME4560": ("ME3350"),  # Verified Aug-16-2016
-                  "ME4570": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-                  "ME4580": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-                  "ME4590": ("ME3360"),  # Verified Aug-16-2016
-                  "ME4610": (["ME3360", "ME3600"]),  # Verified Aug-16-2016
-                  "ME4620": (["ME2700", "ME3120", "ME3600"]),
-                  "ME4680": (["CHM1210", "PHY2410"], ["CHM1210", "PHY1120"]),
-                  "ME4700": (["ME2700", "MTH2320", "MTH2350"],
-                             ["ME2700", "MTH2320", "MTH2330", "MTH2530"]),
-                  "ME4720": ("ME2700"),  # Verified Aug-16-2016
-                  "ME4730": ("ME2700"),  # Verified Aug-16-2016
-                  "ME4740": (["ME2700", "ME3120", "ME4620c"]),
-                  "ME4750": (["ME2600", "ME2700"]),  # Verified Aug-16-2016
-                  "ME4770": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
-                  "ME4820": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-                  "ME4830": ("ME2700"),  # Verified Aug-16-2016
-                  "ME4840": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
-                  "ME4850": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-                  "ME4860": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
-                  "ME4870": (["ME2210"], ["BME3212"], ["ISE3212"]),
-                  "ME4880": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
-                  "ME4910": (["ME2020", "EGR3350", "MTH2320", "MTH2350",
-                                        "PHY2410", "EE2010", "ME2210",
-                                        "ME2700", "ME3120", "ME3310",
-                                        "ME4620c"],
-                             ["ME2020", "EGR3350", "MTH2320", "MTH2330",
-                                        "MTH2530", "PHY2410", "EE2010",
-                                        "ME2210", "ME2700", "ME3120", "ME3310",
-                                        "ME4620c"]),
-                  "ME7060": (["ME6120", "ME7100"],
-                             ["ME4120", "ME7100"]),
-                  "ME7080": (["ME6120", "ME7100"],
-                             ["ME4120", "ME7100"]),
-                  "ME7100": ("ME3120"),
-                  "ME7120": ("ME4120", "ME6120"),
-                  "ME7140": (["ME6120", "ME7100"],
-                             ["ME4120", "ME7100"]),
-                  "ME7160": (["ME6120", "ME7100"],
-                             ["ME4120", "ME7100"]),
-    #              "ME7200": ("ME5120"),
-                  "ME7210": ("ME4210", "ME6210"),
-    #              "ME7250": ("ME5210"),
-                  "ME7300": (),
-                  "ME7330": (),  # "ME5360"
-                  "ME7340": ("ME4010", "ME6010"),
-    #              "ME7350": ("ME5360"),
-                  "ME7390": ("ME7500"),
-                  "ME7350": (),
-                  "ME7400": ("ME4330", "ME6330"),
-                  "ME7500": (),  # ["ME5320", "ME5750"]
-    #              "ME7520": (["ME5310", "ME5750"]),
-                  "ME7550": ("ME7500"),
-                  "ME7690": ("ME4210", "ME6210"),
-                  "ME7720": ("ME4720", "ME6720"),#, "ME5750"
-                  "ME7730": ("ME4700", "ME6700"),
-                  "ME7740": (),
-                  "ME7750": ("ME4700", "ME6700"),
-                  "ME7760": (),
-                  "ME7780": ("ME6730")}
-finally:
-    print('')
+def load_prerequisites(prereqfilename=None):
+    """Load prerequisites from file or use MME prerequisites as of 2017."""
+    print('Loading prerequisites from {}.'.format(prereqfilename))
+    try:
+        prereqdict = __load_prerequisites(prereqfilename = prereqfilename)
+    except FileNotFoundError:
+        print("Prerequisite definition file not found. ",
+              "Either this is ME or you goofed.")
+        prereqdict = {"ME1020": (["EGR1010"], ["MTH2300", "MTH2310"]),
+                      "ME2120": (["EGR1010", "ME1040", "PHY2400"],
+                                 ["EGR1010", "ME2020", "PHY2400"],
+                                 ["MTH2310", "ME1040", "PHY2400"],
+                                 ["MTH2310", "ME2020", "PHY2400"]),
+                      "ME2210": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
+                      #  This is a pre or co requisite. How to code? I think this
+                      #  works now.
+                      "ME2600": ("ME2700c"),  # Recitation is a co-requisite
+                      "ME2700": (["CHM1210", "PHY2400"]),
+                      "ME3120": (["ME1020", "ME2120"]),  # Verified Aug-15-2016
+                      "ME3210": (["EE2010", "ME2210", "ME3120",
+                                            "ME3350", "MTH2350"],
+                                 ["EE2010", "ME2210", "ME3120", "ME3350",
+                                            "MTH2330", "MTH2530"]), #  Verified Aug-16-2016
+                      "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
+                      "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
+                      "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
+                      "ME3360": (["ME3350", "MTH2350"],["ME3350", "MTH2350"]),  # Verified Aug-15-2016
+                      "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"],
+                                 ["EE2010", "EGR3350", "ME2120", "MTH2330", "MTH2530"]),
+                      "ME3750": ("ME2700"),  # Verified Aug-15-2016
+                      "ME3760": ("ME3750"),  # Verified Aug-15-2016
+                      "ME4010": (["ME3360", "ME3210"]),  # Verified Aug-15-2016
+                      "ME4080": (["MTH2350", "ME3210"],
+                                 ["MTH2330", "MTH2530", "ME3210"]),  # Verified Aug-16-2016
+                      "ME4120": (["MTH2320", "MTH2350", "ME3120"],
+                                 ["MTH2320", "MTH2330", "MTH2530", "ME3120"]),
+                      "ME4140": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
+                      "ME4150": ("ME4140"),  # Verified Aug-16-2016
+                      "ME4160": (["ME2020", "ME2210", "ME3120"],
+                                 ["ME1040", "ME2210", "ME3120"]),
+                      "ME4180": ("ME2700"),  # Verified Aug-16-2016
+                      "ME4190": (["MTH2350", "MTH2320", "ME3350"],
+                                 ["MTH2330", "MTH2530", "MTH2320", "ME3350"]),
+                      "ME4210": ("ME3210"),  # Verified Aug-16-2016
+                      "ME4220": ("ME3210"),
+                      "ME4240": ("ME2210"),  # Verified Aug-16-2016
+                      "ME4250": ("ME2210"),  # Verified Aug-16-2016
+                      "ME4260": (["MTH2350"],
+                                 ["MTH2530", "MTH2530"]),
+                      "ME4330": ("ME3350"),  # Verified Aug-16-2016
+                      "ME4340": ("ME3360"),  # Verified Aug-16-2016
+                      "ME4350": ("ME3350"),  # Verified Aug-16-2016
+                      "ME4360": (["ME3320", "ME3350", "MTH2350"],
+                                 ["ME3320", "ME3350", "MTH2530", "MTH2330"]),
+                      "ME4430": ("ME3350"),  # Verified Aug-16-2016
+                      "ME4440": ("ME3350"),  # Verified Aug-16-2016
+                      "ME4490": ("ME3120"),  # Verified Aug-16-2016
+                      "ME4520": ("ME3350"),  # Verified Aug-16-2016
+                      "ME4530": ("ME3310"),  # Verified Aug-16-2016
+                      "ME4540": ("ME3360"),  # Verified Aug-16-2016
+                      "ME4550": ("ME3360"),  # Verified Aug-16-2016
+                      "ME4560": ("ME3350"),  # Verified Aug-16-2016
+                      "ME4570": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                      "ME4580": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                      "ME4590": ("ME3360"),  # Verified Aug-16-2016
+                      "ME4610": (["ME3360", "ME3600"]),  # Verified Aug-16-2016
+                      "ME4620": (["ME2700", "ME3120", "ME3600"]),
+                      "ME4680": (["CHM1210", "PHY2410"], ["CHM1210", "PHY1120"]),
+                      "ME4700": (["ME2700", "MTH2320", "MTH2350"],
+                                 ["ME2700", "MTH2320", "MTH2330", "MTH2530"]),
+                      "ME4720": ("ME2700"),  # Verified Aug-16-2016
+                      "ME4730": ("ME2700"),  # Verified Aug-16-2016
+                      "ME4740": (["ME2700", "ME3120", "ME4620c"]),
+                      "ME4750": (["ME2600", "ME2700"]),  # Verified Aug-16-2016
+                      "ME4770": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
+                      "ME4820": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                      "ME4830": ("ME2700"),  # Verified Aug-16-2016
+                      "ME4840": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
+                      "ME4850": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                      "ME4860": (["ME2700", "ME3120"]),  # Verified Aug-16-2016
+                      "ME4870": (["ME2210"], ["BME3212"], ["ISE3212"]),
+                      "ME4880": (["ME2700", "ME3310"], ["ME2700", "ME3750"]),
+                      "ME4910": (["ME2020", "EGR3350", "MTH2320", "MTH2350",
+                                            "PHY2410", "EE2010", "ME2210",
+                                            "ME2700", "ME3120", "ME3310",
+                                            "ME4620c"],
+                                 ["ME2020", "EGR3350", "MTH2320", "MTH2330",
+                                            "MTH2530", "PHY2410", "EE2010",
+                                            "ME2210", "ME2700", "ME3120", "ME3310",
+                                            "ME4620c"]),
+                      "ME7060": (["ME6120", "ME7100"],
+                                 ["ME4120", "ME7100"]),
+                      "ME7080": (["ME6120", "ME7100"],
+                                 ["ME4120", "ME7100"]),
+                      "ME7100": ("ME3120"),
+                      "ME7120": ("ME4120", "ME6120"),
+                      "ME7140": (["ME6120", "ME7100"],
+                                 ["ME4120", "ME7100"]),
+                      "ME7160": (["ME6120", "ME7100"],
+                                 ["ME4120", "ME7100"]),
+        #              "ME7200": ("ME5120"),
+                      "ME7210": ("ME4210", "ME6210"),
+        #              "ME7250": ("ME5210"),
+                      "ME7300": (),
+                      "ME7330": (),  # "ME5360"
+                      "ME7340": ("ME4010", "ME6010"),
+        #              "ME7350": ("ME5360"),
+                      "ME7390": ("ME7500"),
+                      "ME7350": (),
+                      "ME7400": ("ME4330", "ME6330"),
+                      "ME7500": (),  # ["ME5320", "ME5750"]
+        #              "ME7520": (["ME5310", "ME5750"]),
+                      "ME7550": ("ME7500"),
+                      "ME7690": ("ME4210", "ME6210"),
+                      "ME7720": ("ME4720", "ME6720"),#, "ME5750"
+                      "ME7730": ("ME4700", "ME6700"),
+                      "ME7740": (),
+                      "ME7750": ("ME4700", "ME6700"),
+                      "ME7760": (),
+                      "ME7780": ("ME6730")}
+    finally:
+        print('')
+    prereqdict = collections.OrderedDict(sorted(prereqdict.items()))
+    return prereqdict
 
 
-#print(prereqdict)
-
-#print(collections.OrderedDict(sorted(prereqdict.items())))
-prereqdict = collections.OrderedDict(sorted(prereqdict.items()))
-
+# print(collections.OrderedDict(sorted(prereqdict.items())))
 majordict = {"ME4910": ["Mech Engineering - BSME",
                         "Mech Engineering - Pre",
                         "Materials Sci + Egr - BSMSE",
@@ -397,13 +398,21 @@ majordict = {"ME4910": ["Mech Engineering - BSME",
                         "Mech Engineering - Pre",
                         "Materials Sci + Egr - BSMSE",
                         'Materials Sci + Egr - Pre'],
-             "ME4750": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
+             "ME4750": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
                         'Materials Sci + Egr - Pre'],
-             "ME4860": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
+             "ME4860": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
                         'Materials Sci + Egr - Pre'],
-             "ME3870": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
+             "ME3870": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
                         'Materials Sci + Egr - Pre'],
-             "ME4880": ["Mech Engineering - BSME", "Mech Engineering - Pre", "Materials Sci + Egr - BSMSE",
+             "ME4880": ["Mech Engineering - BSME",
+                        "Mech Engineering - Pre",
+                        "Materials Sci + Egr - BSMSE",
                         'Materials Sci + Egr - Pre']}
 
 
@@ -411,38 +420,46 @@ text_output = False
 
 
 # Hard coded toggling ot text output.
-def tprint(string, output=True):
-    #  print(output)
-    if output:
-        print(string)
+# def logging.debug(string, output=True):
+#     #  print(output)
+#     if output:
+#         print(string)
 
 # This co-or-prequisite is hard-coded in passed_class
 co_or_preqdict = {"ME2600": ("ME2700")}
 
 
 def isC(grade):
+    """Return whether or not the grade is a C or better."""
     answer = grade == 'A' or grade == 'B' or grade == 'C'
     return answer
 
 
 def isD(grade):
+    """Return whether or not the grade is a D or better."""
     answer = grade == 'A' or grade == 'B' or grade == 'C' or grade == 'D'
     return answer
 
 
 def ispass(grade):
-    answer = grade == 'A' or grade == 'B' or grade == 'C' or grade == 'D'
+    """Return whether they passed or not."""
+    answer = (grade == 'A'
+              or grade == 'B'
+              or grade == 'C'
+              or grade == 'D'
+              or grade == 'P')
     return answer
 
 
 def isbetterthan(grade_needed, grade_received):
+    """Return whether they received the necessary grade."""
     if grade_needed == 'C':
         answer = isC(grade_received)
     elif grade_needed == 'D':
         answer = isD(grade_received)
     else:
         print("Warning: Grade needed isn't a real grade: {}."
-        .format(grade_needed))
+              .format(grade_needed))
         answer = 3
     return answer
 
@@ -483,9 +500,9 @@ def passed_class(class_name, classes_taken, course_name):
         answer)
     Third: if there is no dash but there is a c (elif), log the course as a
         corequisite. All we have to do is look to see if they are taking it
-        now. If no, did they take it in the past and get at least a D
-   """
+        now. If no, did they take it in the past and get at least a D.
 
+    """
     if '-' in class_name:
         grade_required = class_name[-1]
         class_name = class_name[:-2]
@@ -497,8 +514,8 @@ def passed_class(class_name, classes_taken, course_name):
     answer = False
     if class_name in classes_taken:
 
-#        if class_name is "ME2120" or class_name is "ME3310" or class_name is
-#        "ME2700":
+    #  if class_name is "ME2120" or class_name is "ME3310" or class_name is
+    #  "ME2700":
         if grade_required is 'c' or grade_required is 'C':
             answer = isC(classes_taken[class_name])
         # I hate this hard coding of co-requisite exception. I believe it is
@@ -529,10 +546,11 @@ def passed_class(class_name, classes_taken, course_name):
     # elif (is_coreq and is_coreq_regd) or (is_coreq and is_class_passed):
 
     # old elif command
-    elif (class_name[:class_name.find('c')] in classes_taken # this long test is for co-requisites
-          and classes_taken[class_name[:class_name.find('c')]] == '>') or (class_name[:class_name.find('c')]
-                                                                           in classes_taken and passed_class(
-        class_name[:class_name.find('c')], classes_taken, course_name)[0]):  # corequisite taken earlier and passed?
+    elif ((class_name[:class_name.find('c')] in classes_taken  # this long test is for co-requisites
+          and classes_taken[class_name[:class_name.find('c')]] == '>')
+          or (class_name[:class_name.find('c')]
+          in classes_taken and passed_class(class_name[:class_name.find('c')],
+                                            classes_taken, course_name)[0])):  # corequisite taken earlier and passed?
     #
         answer = True
     else:
@@ -605,44 +623,44 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             prereqs, data["Pre_req_dic"].loc[student], course_name)
         if satisfied is False:
             data.loc[student, "Pre_req_status"] = "Missing prereqs"
-            tprint('Begin {}'.format(student))
+            logging.debug('Begin {}'.format(student))
             # print(data)
             print('Prerequisite Failure')
             print('********************')
             if student in no_transfer_data:
-                tprint(
+                logging.debug(
                     'No transfer data for {}. ************************'.format(student))
 
-            tprint(student)
-            tprint('Section number {}'.format(
+            logging.debug(student)
+            logging.debug('Section number {}'.format(
                 data["CourseSectionNumber"].loc[student][:-1]))
 
             # print(student)
-            tprint('Name: {}'.format(data.loc[student, ["Name"]].values[0]))
-            tprint('Email: {}'.format(data.loc[student, ["EmailAddress"]].values[0]))
+            logging.debug('Name: {}'.format(data.loc[student, ["Name"]].values[0]))
+            logging.debug('Email: {}'.format(data.loc[student, ["EmailAddress"]].values[0]))
             phone_number = str(data.loc[student, ["PhoneNumber"]].values[0])
             phone_number = '(' + phone_number[:3] + ')' + \
                            phone_number[3:6] + '-' + phone_number[6:]
-            tprint('Phone number: {}'.format(phone_number))
-            tprint('Program description: {}'.format(
+            logging.debug('Phone number: {}'.format(phone_number))
+            logging.debug('Program description: {}'.format(
                 data.loc[student, ["ProgramDescription"]].values[0]))
             # is "nan":
             if isinstance(data.loc[student, ["PrimaryAdvisorNameLFMI"]].values[0], float):
-                tprint('Advisor name: {}\n'.format("No Advisor On Record"))
+                logging.debug('Advisor name: {}\n'.format("No Advisor On Record"))
             else:
-                tprint('Advisor name: {}\n'.format(
+                logging.debug('Advisor name: {}\n'.format(
                     data.loc[student, ["PrimaryAdvisorNameLFMI"]].values[0]))
-            tprint(data.loc[student].iloc[6:-1])
-            tprint('Has:\n{}'.format(
+            logging.debug(data.loc[student].iloc[6:-1])
+            logging.debug('Has:\n{}'.format(
                 data.loc[student, ["Pre_req_dic"]].values[0]))
             # data.loc[student,'Has'] = data.loc[student,["Pre_req_dic"]].values[0]
-            tprint('Needs any of the following combinations:')
+            logging.debug('Needs any of the following combinations:')
             allprereqs = ''
-            tprint('prereqs')
-            tprint(prereqs)
+            logging.debug('prereqs')
+            logging.debug(prereqs)
             # great place for a note to explain what this does. Dang it.
             if type(prereqs) is tuple:
-                tprint('growing list of prerequisites')
+                logging.debug('growing list of prerequisites')
                 for idx, set_ in enumerate(prereqs):
                     """print('all prereqs')
                     print(allprereqs)
@@ -655,24 +673,24 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
                             allprereqs = allprereqs + indiv_course + ', '
                         else:
                             allprereqs = allprereqs + str(set_) + ', '
-                    #tprint('idx %', idx)
-                    #tprint('set_ %', set_)
+                    #logging.debug('idx %', idx)
+                    #logging.debug('set_ %', set_)
                     # prereqs[idx] = 'and '.join([str(x) for x in prereqs[idx]])
-                    #tprint(set_)
+                    #logging.debug(set_)
                 allprereqs = allprereqs[:-2]
                 allprereqs = ', or'.join([str(x) for x in prereqs])
             else:
                 # data.loc[student, "Pre_req_status"] = None
-                tprint(prereqs)
+                logging.debug(prereqs)
                 allprereqs = prereqs
                 allprereqs = ', '.join([str(x) for x in allprereqs])
-            tprint(allprereqs)
+            logging.debug(allprereqs)
             # Put needs in excel spreadsheet
             # data.loc[student,'Needs'] = allprereqs
 
             email_list = email_list + ';' + \
                          data.loc[student, ["EmailAddress"]].values[0]
-            tprint('=====================================================\n\n')
+            logging.debug('=====================================================\n\n')
         else:
             data.loc[student, "Pre_req_status"] = None
     print('Data after prereq checking')
@@ -734,7 +752,7 @@ def read_prereq_report(filename):
     return data, student_list, Course_Name, Section_Number
 
 
-def prereq_list(prereqdict = prereqdict):
+def prereq_list(prereqdict = None): #   = prereqdict):
     """prereq_list()"""
     for i in prereqdict:
         print(i + ':' + ' ' + flat_list(prereqdict[i]))
@@ -779,10 +797,10 @@ def append_transfer(data, student_list, transfer_filename):
         except IOError:
             print("Oops!  Cannot find {}".format(filename))
             filename = input("Try using the full path: ")
-    tprint('\n\n*****************************************************************************')
-    tprint("Transfer prerequisite file last modified: %s" %
+    logging.debug('\n\n*****************************************************************************')
+    logging.debug("Transfer prerequisite file last modified: %s" %
           time.ctime(os.path.getmtime(filename)))
-    tprint('*****************************************************************************\n\n')
+    logging.debug('*****************************************************************************\n\n')
 
     transfer_data = pd.read_excel(filename, index_col=0, skip_footer=1)
     all_preqs = []
@@ -827,17 +845,17 @@ def check_majors(major_requirement, data, student_list):
     return data
 
 
-def check_report(filename, prereqdict=prereqdict, majordict=majordict,
-                 transfer_filename=transfer_filename):
+def check_report(filename, prereqdict=None, majordict=None,
+                 transfer_filename=None):
     """
 
 
     """
     data, student_list, course_name, Section_Number = read_prereq_report(filename)
-    tprint(filename)
+    logging.debug(filename)
     # print(data)
     file_path = filename[:filename.rfind('/')+1]
-    tprint(file_path)
+    logging.debug(file_path)
     prereqs = prereqdict[course_name]
     data, no_transfer_data = append_transfer(data, student_list,
                                                    transfer_filename)
@@ -983,7 +1001,7 @@ def check_report(filename, prereqdict=prereqdict, majordict=majordict,
     # writer.column_dimensions['Name'].width = 15
     writer.save()
     print(file_path + course_name + '_report_refined.xlsx written.')
-    tprint('\a')
+    logging.debug('\a')
     print('end')
     return data
 
@@ -1004,19 +1022,19 @@ for file in sys.argv:
     cwd = os.getcwd()
     if ".py" in file:
         # print(file[-2:])
-        tprint('\n')
+        logging.debug('\n')
         # print("Ignoring {}".format(file))
     elif "Student_prerequisite_data.xlsx" in file or '~' in file:
-        tprint('\n')
+        logging.debug('\n')
     elif '--dump_prereqs' in file:
         prereq_list()
     elif ".xlsx" not in file:
         print('{} is not a valid SIBI report. Wrong extension.'.format(file))
     elif "refined" in file:
-        tprint('\n')
+        logging.debug('\n')
     else:
-        tprint(file)
-        tprint('**************')
+        logging.debug(file)
+        logging.debug('**************')
         data = check_report(file, prereqdict, majordict, transfer_filename)
 """
         # print(data)
