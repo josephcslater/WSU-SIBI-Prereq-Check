@@ -63,7 +63,7 @@ except ModuleNotFoundError:
     print('It is not necessary if running with a configured jupyter notebook.')
 
 
-def _load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
+def _load_prerequisites(prereqfilename='prerequisites.xlsx'):
     """Load prerequisite definitions for all program courses."""
     pr = pd.io.excel.read_excel(prereqfilename)
     preqs = dict()
@@ -72,14 +72,18 @@ def _load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
         if '.' not in class_name:
             all_columns_with_class = [x for x in list(pr) if class_name in x]
             if len(all_columns_with_class) is 1:
-                preqs[class_name] = tuple([list(pd.Series.dropna(pr[class_name]))])
+                preqs[class_name] = tuple(
+                    [list(pd.Series.dropna(pr[class_name]))])
             else:
                 for num, class_case in enumerate(all_columns_with_class):
                     if class_name is class_case:
-                        preqs[class_name] = [list(pd.Series.dropna(pr[class_case]))]
+                        preqs[class_name] = [
+                            list(pd.Series.dropna(pr[class_case]))]
                     else:
-                        preqs[class_name].append(list(pd.Series.dropna(pr[class_case])))
-                        preqs[class_name][num] = list(pd.Series.dropna(pr[class_case]))
+                        preqs[class_name].append(
+                            list(pd.Series.dropna(pr[class_case])))
+                        preqs[class_name][num] = list(
+                            pd.Series.dropna(pr[class_case]))
                 preqs[class_name] = tuple(preqs[class_name])
     for key in preqs:
         aaa = 1
@@ -92,7 +96,7 @@ def load_prerequisites(prereqfilename=None):
     """Load prerequisites from file or use MME prerequisites as of 2017."""
     print('Loading prerequisites from {}.'.format(prereqfilename))
     try:
-        prereqdict = _load_prerequisites(prereqfilename = prereqfilename)
+        prereqdict = _load_prerequisites(prereqfilename=prereqfilename)
     except FileNotFoundError:
         print("Prerequisite definition file not found. ",
               "Either this is ME or you goofed.")
@@ -110,11 +114,12 @@ def load_prerequisites(prereqfilename=None):
                       "ME3210": (["EE2010", "ME2210", "ME3120",
                                             "ME3350", "MTH2350"],
                                  ["EE2010", "ME2210", "ME3120", "ME3350",
-                                            "MTH2330", "MTH2530"]), #  Verified Aug-16-2016
+                                            "MTH2330", "MTH2530"]),  # Verified Aug-16-2016
                       "ME3310": (["EGR1010", "PHY2400"], ["MTH2310c", "PHY2400"]),
                       "ME3320": (["ME1020", "ME3310"]),  # Verified Aug-16-2016
                       "ME3350": (["ME2210", "ME3310"]),  # Verified Aug-16-2016
-                      "ME3360": (["ME3350", "MTH2350"],["ME3350", "MTH2350"]),  # Verified Aug-15-2016
+                      # Verified Aug-15-2016
+                      "ME3360": (["ME3350", "MTH2350"], ["ME3350", "MTH2350"]),
                       "ME3600": (["EE2010", "EGR3350", "ME2120", "MTH2350"],
                                  ["EE2010", "EGR3350", "ME2120", "MTH2330", "MTH2530"]),
                       "ME3750": ("ME2700"),  # Verified Aug-15-2016
@@ -188,21 +193,21 @@ def load_prerequisites(prereqfilename=None):
                                  ["ME4120", "ME7100"]),
                       "ME7160": (["ME6120", "ME7100"],
                                  ["ME4120", "ME7100"]),
-        #              "ME7200": ("ME5120"),
+                      #              "ME7200": ("ME5120"),
                       "ME7210": ("ME4210", "ME6210"),
-        #              "ME7250": ("ME5210"),
+                      #              "ME7250": ("ME5210"),
                       "ME7300": (),
                       "ME7330": (),  # "ME5360"
                       "ME7340": ("ME4010", "ME6010"),
-        #              "ME7350": ("ME5360"),
+                      #              "ME7350": ("ME5360"),
                       "ME7390": ("ME7500"),
                       "ME7350": (),
                       "ME7400": ("ME4330", "ME6330"),
                       "ME7500": (),  # ["ME5320", "ME5750"]
-        #              "ME7520": (["ME5310", "ME5750"]),
+                      #              "ME7520": (["ME5310", "ME5750"]),
                       "ME7550": ("ME7500"),
                       "ME7690": ("ME4210", "ME6210"),
-                      "ME7720": ("ME4720", "ME6720"),#, "ME5750"
+                      "ME7720": ("ME4720", "ME6720"),  # , "ME5750"
                       "ME7730": ("ME4700", "ME6700"),
                       "ME7740": (),
                       "ME7750": ("ME4700", "ME6700"),
@@ -517,8 +522,8 @@ def passed_class(class_name, classes_taken, course_name):
     answer = False
     if class_name in classes_taken:
 
-    #  if class_name is "ME2120" or class_name is "ME3310" or class_name is
-    #  "ME2700":
+        #  if class_name is "ME2120" or class_name is "ME3310" or class_name is
+        #  "ME2700":
         if grade_required is 'c' or grade_required is 'C':
             answer = isC(classes_taken[class_name])
         # I hate this hard coding of co-requisite exception. I believe it is
@@ -550,11 +555,11 @@ def passed_class(class_name, classes_taken, course_name):
 
     # old elif command
     elif ((class_name[:class_name.find('c')] in classes_taken  # this long test is for co-requisites
-          and classes_taken[class_name[:class_name.find('c')]] == '>')
+           and classes_taken[class_name[:class_name.find('c')]] == '>')
           or (class_name[:class_name.find('c')]
-          in classes_taken and passed_class(class_name[:class_name.find('c')],
-                                            classes_taken, course_name)[0])):  # corequisite taken earlier and passed?
-    #
+              in classes_taken and passed_class(class_name[:class_name.find('c')],
+                                                classes_taken, course_name)[0])):  # corequisite taken earlier and passed?
+        #
         answer = True
     else:
         # print('Has not taken {}.'.format(class_name ))
@@ -639,8 +644,10 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
                 data["CourseSectionNumber"].loc[student][:-1]))
 
             # print(student)
-            logging.debug('Name: {}'.format(data.loc[student, ["Name"]].values[0]))
-            logging.debug('Email: {}'.format(data.loc[student, ["EmailAddress"]].values[0]))
+            logging.debug('Name: {}'.format(
+                data.loc[student, ["Name"]].values[0]))
+            logging.debug('Email: {}'.format(
+                data.loc[student, ["EmailAddress"]].values[0]))
             phone_number = str(data.loc[student, ["PhoneNumber"]].values[0])
             phone_number = '(' + phone_number[:3] + ')' + \
                            phone_number[3:6] + '-' + phone_number[6:]
@@ -649,7 +656,8 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
                 data.loc[student, ["ProgramDescription"]].values[0]))
             # is "nan":
             if isinstance(data.loc[student, ["PrimaryAdvisorNameLFMI"]].values[0], float):
-                logging.debug('Advisor name: {}\n'.format("No Advisor On Record"))
+                logging.debug('Advisor name: {}\n'.format(
+                    "No Advisor On Record"))
             else:
                 logging.debug('Advisor name: {}\n'.format(
                     data.loc[student, ["PrimaryAdvisorNameLFMI"]].values[0]))
@@ -676,10 +684,10 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
                             allprereqs = allprereqs + indiv_course + ', '
                         else:
                             allprereqs = allprereqs + str(set_) + ', '
-                    #logging.debug('idx %', idx)
-                    #logging.debug('set_ %', set_)
+                    # logging.debug('idx %', idx)
+                    # logging.debug('set_ %', set_)
                     # prereqs[idx] = 'and '.join([str(x) for x in prereqs[idx]])
-                    #logging.debug(set_)
+                    # logging.debug(set_)
                 allprereqs = allprereqs[:-2]
                 allprereqs = ', or'.join([str(x) for x in prereqs])
             else:
@@ -692,7 +700,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             # data.loc[student,'Needs'] = allprereqs
 
             email_list = email_list + ';' + \
-                         data.loc[student, ["EmailAddress"]].values[0]
+                data.loc[student, ["EmailAddress"]].values[0]
             # print('=====================================================\n\n')
         else:
             data.loc[student, "Pre_req_status"] = None
@@ -710,7 +718,7 @@ def read_prereq_report(filename):
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
     Section_Number = data["CourseSectionNumber"].iloc[1][:-1]
-    print('Course {}, section {}.'.format(Course_Name,Section_Number))
+    print('Course {}, section {}.'.format(Course_Name, Section_Number))
     print('*****************')
     num_prereqs = 0
     keep_cols = ['Name', 'EmailAddress', 'PhoneNumber', 'ProgramDescription',
@@ -734,7 +742,7 @@ def read_prereq_report(filename):
         for i in range(base_cols, base_cols + 2 * int(num_prereqs), 2):
             if hasattr(data.loc[student].iloc[i], 'encode'):
                 pre_req_class = data.loc[student].iloc[i][
-                                0:(data.loc[student].iloc[i].find('-->'))]
+                    0:(data.loc[student].iloc[i].find('-->'))]
                 grade_str = data.loc[student].iloc[i + 1]
                 # grade string parsing
                 if data.loc[student].iloc[i + 1].find(';') == -1:
@@ -755,10 +763,11 @@ def read_prereq_report(filename):
     return data, student_list, Course_Name, Section_Number
 
 
-def prereq_list(prereqdict = None): #   = prereqdict):
+def prereq_list(prereqdict=None):  # = prereqdict):
     """prereq_list()"""
     for i in prereqdict:
         print(i + ':' + ' ' + flat_list(prereqdict[i]))
+
 
 def flat_list(list):
     """outlist = flat_list(prereqdict["ME2120"])
@@ -799,10 +808,12 @@ def append_transfer(data, student_list, transfer_filename):
         except IOError:
             print("Oops!  Cannot find {}".format(filename))
             filename = input("Try using the full path: ")
-    logging.debug('\n\n*****************************************************************************')
+    logging.debug(
+        '\n\n*****************************************************************************')
     logging.debug("Transfer prerequisite file last modified: %s" %
-          time.ctime(os.path.getmtime(filename)))
-    logging.debug('*****************************************************************************\n\n')
+                  time.ctime(os.path.getmtime(filename)))
+    logging.debug(
+        '*****************************************************************************\n\n')
 
     transfer_data = pd.read_excel(filename, index_col=0, skip_footer=1)
     all_preqs = []
@@ -843,7 +854,7 @@ def check_majors(major_requirement, data, student_list):
             print('{} ({}) major is {}. Must be {}.\n'.format(data["Name"].loc[student], data[
                 "EmailAddress"].loc[student], data["ProgramDescription"].loc[student], major_requirement))
             data.loc[student, "Major"] = "Wrong major"
-        #print('That\'s it!')
+        #  print('That\'s it!')
     return data
 
 
@@ -852,10 +863,11 @@ def check_report(filename,
                  majordict=None,
                  transfer_filename=None):
     """Load SIBI report and create simplified report."""
-    data, student_list, course_name, Section_Number = read_prereq_report(filename)
+    data, student_list, course_name, Section_Number = read_prereq_report(
+        filename)
     logging.debug(filename)
     # print(data)
-    file_path = filename[:filename.rfind('/')+1]
+    file_path = filename[:filename.rfind('/') + 1]
     logging.debug(file_path)
     prereqs = prereqdict[course_name]
     data, no_transfer_data = append_transfer(data,
@@ -882,12 +894,12 @@ def check_report(filename,
         except AttributeError:
             Pre_reqs = True
 
-        if Pre_reqs == False and Majors_good == False:
+        if Pre_reqs is False and Majors_good is False:
             frames = [data1, data2]
             data = pd.concat(frames)
-        elif Pre_reqs == True:
+        elif Pre_reqs:
             data = data1
-        elif Majors_good == True:
+        elif Majors_good:
             data = data2
         else:
             data = data
@@ -917,7 +929,7 @@ def check_report(filename,
     # print(data['EmailAddress'][0])
 
     email_list = ''
-    #for email in data['EmailAddress']:
+    # for email in data['EmailAddress']:
     for index, row in data.iterrows():
         try:
             if row['Pre_req_status'] == 'Missing prereqs':
@@ -941,19 +953,19 @@ def check_report(filename,
 
     data.at['E List', 'Name'] = email_list
 
-    #data.iat[18, 0] = 7
+    # data.iat[18, 0] = 7
 
     # Write data to excel spreadsheet
     writer = pd.ExcelWriter(file_path + course_name + '-' + Section_Number +
                             '_report_refined.xlsx',  engine='xlsxwriter')
-    data.to_excel(writer, sheet_name = 'Both Campuses')
+    data.to_excel(writer, sheet_name='Both Campuses')
     logging.debug('All data before write')
     # print(data)
 
 #   Create Dayton Sheet
-    data_Dayton = data[data['CourseSectionNumber'].str.contains('W')==False]
+    data_Dayton = data[data['CourseSectionNumber'].str.contains('W') is False]
     email_list = ''
-    #for email in data_Dayton['EmailAddress']:
+    # for email in data_Dayton['EmailAddress']:
     for index, row in data_Dayton.iterrows():
         try:
             if row['Pre_req_status'] == 'Missing prereqs':
@@ -971,13 +983,13 @@ def check_report(filename,
     data_Dayton = data_Dayton.append(df2)
     data_Dayton = data_Dayton[original_columns]
     data_Dayton.at['E List', 'Name'] = email_list
-    data_Dayton.to_excel(writer, sheet_name = 'Dayton Campus')
+    data_Dayton.to_excel(writer, sheet_name='Dayton Campus')
 
 
 #   Create Lake Sheet
-    data_Lake = data[data['CourseSectionNumber'].str.contains('W')==True]
+    data_Lake = data[data['CourseSectionNumber'].str.contains('W') is True]
     email_list = ''
-    #for email in data_Lake['EmailAddress']:
+    # for email in data_Lake['EmailAddress']:
     for index, row in data_Lake.iterrows():
         try:
             if row['Pre_req_status'] == 'Missing prereqs':
@@ -995,7 +1007,7 @@ def check_report(filename,
     data_Lake = data_Lake.append(df2)
     data_Lake = data_Lake[original_columns]
     data_Lake.at['E List', 'Name'] = email_list
-    data_Lake.to_excel(writer, sheet_name = 'Lake Campus')
+    data_Lake.to_excel(writer, sheet_name='Lake Campus')
 
     # writer.sheets['Checks'].column_dimensions['Name'].width = 15
     # help(writer.sheets['Checks'].set_column)
@@ -1050,7 +1062,7 @@ def check_prerequisites(prereqfilename=None,
 
     for file in directory_list:
         # print(file[-2:])
-        cwd = os.getcwd()
+        # cwd = os.getcwd()
         if ".py" in file:
             # print(file[-2:])
             logging.debug('\n')
