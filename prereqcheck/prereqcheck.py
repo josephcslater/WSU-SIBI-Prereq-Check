@@ -54,14 +54,16 @@ transfer_filename = "/Users/jslater/Documents/OneDrive - Wright State University
 # print('ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
 
 try:
-    from prereq_config import *
+    from prereqcheck.local_prereq_config import *
     print('Prerequisites defined in {}'.format(prereqfilename))
 except ModuleNotFoundError:
     # print('ModuleNotFoundError')
-    print('prereq_config.xlsx not found.')
+    print('Local configuration file local_prereq_config.py not found.')
+    print('This file should be located in the module code directory.')
+    print('It is not necessary if running with a configured jupyter notebook.')
 
 
-def __load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
+def _load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
     """Load prerequisite definitions for all program courses."""
     pr = pd.io.excel.read_excel(prereqfilename)
     preqs = dict()
@@ -89,7 +91,7 @@ def load_prerequisites(prereqfilename=None):
     """Load prerequisites from file or use MME prerequisites as of 2017."""
     print('Loading prerequisites from {}.'.format(prereqfilename))
     try:
-        prereqdict = __load_prerequisites(prereqfilename = prereqfilename)
+        prereqdict = _load_prerequisites(prereqfilename = prereqfilename)
     except FileNotFoundError:
         print("Prerequisite definition file not found. ",
               "Either this is ME or you goofed.")
@@ -788,7 +790,6 @@ def flat_list(list):
 def append_transfer(data, student_list, transfer_filename):
     """Add transfer acceptances to SIBI reported grades."""
 
-    filename = "/Users/jslater/Documents/OneDrive - Wright State University/Chair-OneDrive/PrereqData/Student_prerequisite_data.xlsx"
     filename = transfer_filename
     while True:
         try:
@@ -845,20 +846,20 @@ def check_majors(major_requirement, data, student_list):
     return data
 
 
-def check_report(filename, prereqdict=None, majordict=None,
+def check_report(filename,
+                 prereqdict=None,
+                 majordict=None,
                  transfer_filename=None):
-    """
-
-
-    """
+    """Load SIBI report and create simplified report."""
     data, student_list, course_name, Section_Number = read_prereq_report(filename)
     logging.debug(filename)
     # print(data)
     file_path = filename[:filename.rfind('/')+1]
     logging.debug(file_path)
     prereqs = prereqdict[course_name]
-    data, no_transfer_data = append_transfer(data, student_list,
-                                                   transfer_filename)
+    data, no_transfer_data = append_transfer(data,
+                                             student_list,
+                                             transfer_filename)
     data = check_class(course_name, student_list,
                        data, prereqs, no_transfer_data)
     print('All data before write 1')
@@ -1010,11 +1011,11 @@ def check_report(filename, prereqdict=None, majordict=None,
 # ! /usr/bin/env python
 
 # "Find string in file, show file name, line number, and line"
-
+"""
 os.environ['PATH'] = os.path.normpath(
     os.environ['PATH'] + ':opt.local/bin:/usr/texbin:/usr/local/bin:/usr/bin:/bin:')
 str2find = sys.argv[-1]
-
+"""
 # print(sys.argv[1])
 """
 for file in sys.argv:
@@ -1037,4 +1038,35 @@ for file in sys.argv:
         logging.debug('**************')
         data = check_report(file, prereqdict, majordict, transfer_filename)
 """
-        # print(data)
+#  print(data)
+
+
+def check_prerequisites(prereqfilename=None,
+                        transfer_filename=None,
+                        majordict=None):
+    """Check SIBI filed for major and prerequisite compiance."""
+    directory_list = os.listdir()
+    prereqdict = load_prerequisites(prereqfilename=prereqfilename)
+
+    for file in directory_list:
+        # print(file[-2:])
+        cwd = os.getcwd()
+        if ".py" in file:
+            # print(file[-2:])
+            logging.debug('\n')
+            # print("Ignoring {}".format(file))
+        elif "Student_prerequisite_data.xlsx" in file or '~' in file:
+            logging.debug('Ignoring ', file)
+        elif "prereq" in file:
+            logging.debug('Ignoring ', file)
+        elif '--dump_prereqs' in file:
+            prereq_list()
+        elif ".xlsx" not in file:
+            print('{} is not a valid SIBI report. Wrong extension.'.format(file))
+            print("Don't put other junk in this directory")
+        elif "refined" in file:
+            logging.debug('\n')
+        else:
+            logging.debug(file)
+            logging.debug('**************')
+            data = check_report(file, prereqdict, majordict, transfer_filename)
