@@ -68,6 +68,9 @@ This won’t complete the process, I will have to:
 ------------------------------------------------
 
 -  Install the package that you downloaded
+   -  Run the conda terminal (now on your windows prompt)
+   -  ``execute pip install -e .`` in the root directory for the prerequisite package.
+   -  Edit ``${CONDA_PREFIX}/etc/conda/activate.d/startup.sh`` to change directories and load the jupyter notebook.
 -  Run the notebook and configure to your settings
 -  Demonstrate how to use it.
 
