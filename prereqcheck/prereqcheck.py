@@ -82,7 +82,8 @@ def _load_prerequisites(prereqfilename = 'prerequisites.xlsx'):
                         preqs[class_name][num] = list(pd.Series.dropna(pr[class_case]))
                 preqs[class_name] = tuple(preqs[class_name])
     for key in preqs:
-        print(preqs[key])
+        aaa = 1
+        # print(key, preqs[key])
     return preqs
 
 
