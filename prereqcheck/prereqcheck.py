@@ -3,13 +3,13 @@
 import pandas as pd
 import os.path
 import time
-import sys
 import os
 import collections
 import logging
 
 # logging.basicConfig(level=logging.WARNING)
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 logging.debug('This message should go to the console')
 logging.info('So should this')
 # logging.warning('And this, too')
@@ -628,8 +628,8 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
             data.loc[student, "Pre_req_status"] = "Missing prereqs"
             logging.debug('Begin {}'.format(student))
             # print(data)
-            print('Prerequisite Failure')
-            print('********************')
+            print('***** Prerequisite Failure *****')
+            # print('********************')
             if student in no_transfer_data:
                 logging.debug(
                     'No transfer data for {}. ************************'.format(student))
@@ -693,12 +693,12 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
             email_list = email_list + ';' + \
                          data.loc[student, ["EmailAddress"]].values[0]
-            logging.debug('=====================================================\n\n')
+            # print('=====================================================\n\n')
         else:
             data.loc[student, "Pre_req_status"] = None
-    print('Data after prereq checking')
+    logging.debug('Data after prereq checking')
     # print(data)# print(email_list[1:])
-    print('End Data after prereq checking')
+    logging.debug('End Data after prereq checking')
 
     return data
 
@@ -863,9 +863,9 @@ def check_report(filename,
                                              transfer_filename)
     data = check_class(course_name, student_list,
                        data, prereqs, no_transfer_data)
-    print('All data before write 1')
+    logging.debug('All data before write 1')
     # print(data)
-    print('^^^^^^^^^^^^^^^^')
+    # print('^^^^^^^^^^^^^^^^')
 
     if course_name in majordict:
         data = check_majors(majordict[course_name], data, student_list)
@@ -947,7 +947,7 @@ def check_report(filename,
     writer = pd.ExcelWriter(file_path + course_name + '-' + Section_Number +
                             '_report_refined.xlsx',  engine='xlsxwriter')
     data.to_excel(writer, sheet_name = 'Both Campuses')
-    print('All data before write')
+    logging.debug('All data before write')
     # print(data)
 
 #   Create Dayton Sheet
@@ -1002,9 +1002,8 @@ def check_report(filename,
     # writer.sheets['Checks'].set_column('Name','Name',15)
     # writer.column_dimensions['Name'].width = 15
     writer.save()
-    print(file_path + course_name + '_report_refined.xlsx written.')
+    print(file_path + course_name + '_report_refined.xlsx written.\n')
     logging.debug('\a')
-    print('end')
     return data
 
 
@@ -1064,7 +1063,7 @@ def check_prerequisites(prereqfilename=None,
             prereq_list()
         elif ".xlsx" not in file:
             print('{} is not a valid SIBI report. Wrong extension.'.format(file))
-            print("Don't put other junk in this directory")
+            print("Don't put other junk in this directory. It makes me sad.")
         elif "refined" in file:
             logging.debug('\n')
         else:

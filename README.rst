@@ -72,6 +72,7 @@ This won’t complete the process, I will have to:
    -  ``execute pip install -e .`` in the root directory for the prerequisite package.
    -  Edit ``${CONDA_PREFIX}/etc/conda/activate.d/startup.sh`` to change directories and load the jupyter notebook.
 -  Run the notebook and configure to your settings
+-  Set up the init cells to automatically run
 -  Demonstrate how to use it.
 
 However, doing all of the above will mean that we won’t have to wait
