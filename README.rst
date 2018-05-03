@@ -70,9 +70,10 @@ This won’t complete the process, I will have to:
 -  Install the package that you downloaded
    -  Run the conda terminal (now on your windows prompt)
    -  ``execute pip install -e .`` in the root directory for the prerequisite package.
-   -  Edit ``${CONDA_PREFIX}/etc/conda/activate.d/startup.sh`` to change directories and load the jupyter notebook.
+   -  Edit ``${CONDA_PREFIX}/etc/conda/activate.d/startup.sh`` to run the script, change directories or load the jupyter notebook.
 -  Run the notebook and configure to your settings
--  Set up the init cells to automatically run
+-  Edit those setting back into the script.
+-  Set up the init cells to automatically run, just in case. 
 -  Demonstrate how to use it.
 
 However, doing all of the above will mean that we won’t have to wait
