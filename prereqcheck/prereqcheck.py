@@ -964,7 +964,7 @@ def check_report(filename,
     # print(data)
 
 #   Create Dayton Sheet
-    data_Dayton = data[data['CourseSectionNumber'].str.contains('W') is False]
+    data_Dayton = data[data['CourseSectionNumber'].str.contains('W') == False]
     email_list = ''
     # for email in data_Dayton['EmailAddress']:
     for index, row in data_Dayton.iterrows():
@@ -988,7 +988,7 @@ def check_report(filename,
 
 
 #   Create Lake Sheet
-    data_Lake = data[data['CourseSectionNumber'].str.contains('W') is True]
+    data_Lake = data[data['CourseSectionNumber'].str.contains('W') == True]
     email_list = ''
     # for email in data_Lake['EmailAddress']:
     for index, row in data_Lake.iterrows():
