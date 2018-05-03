@@ -3,6 +3,7 @@
 import pandas as pd
 import os.path
 import time
+import sys
 import os
 import collections
 import logging
@@ -1082,3 +1083,14 @@ def check_prerequisites(prereqfilename=None,
             logging.debug(file)
             logging.debug('**************')
             data = check_report(file, prereqdict, majordict, transfer_filename)
+    print('\n\n\n\n')
+    for count in range(5):
+        for count2 in range(50):
+            print('*', end='')
+            time.sleep(0.01)
+            sys.stdout.flush()
+        for count2 in range(50):
+            print('\b \b', end='')
+            time.sleep(0.01)
+            sys.stdout.flush()
+    print('All done!')
