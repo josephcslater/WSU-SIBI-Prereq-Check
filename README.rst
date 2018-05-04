@@ -6,16 +6,7 @@ You need to:
 
 1. Install the `github app <https://desktop.github.com/>`__.
 
-   -  You don’t need to make an account (anymore)
-
-2. Clone this repository:
-
-   -  See the **green button** a couple inches below the top right of this page.
-
-   -  Click it and select "Open in Desktop"
-
-   -  When it asks you where to put it, put it in your documents folder,
-      or a reasonable subfolder **that you will remember**.
+   -  You don’t need to make an account (anymore). **Please don't**
 
 3. `Install Python <https://www.anaconda.com/download/>`__
 
@@ -67,13 +58,16 @@ You need to:
 This won’t complete the process, I will have to:
 ------------------------------------------------
 
--  Install the package that you downloaded
-   -  Run the conda terminal (now on your windows prompt)
+-  Install the WSU-SIBI package
+   -  Run the ``Anaconda Prompt`` (now on your windows start menu, in
+      the ``Anaconda3`` folder)
    -  ``execute pip install -e .`` in the root directory for the prerequisite package.
-   -  Edit ``${CONDA_PREFIX}/etc/conda/activate.d/startup.sh`` to run the script, change directories or load the jupyter notebook.
--  Run the notebook and configure to your settings
--  Edit those setting back into the script.
--  Set up the init cells to automatically run, just in case. 
+-  Run the Jupyter notebook and configure to your settings
+-  Save the script and notebook to a better location.
+-  Edit ``activate.bat`` in the folder
+   ``C:\Users\(username)\AppData\Local\Continuum\anaconda3\Scripts``
+   and add the line
+   ``python (pathto)Check_Prerequisites.py``.
 -  Demonstrate how to use it.
 
 However, doing all of the above will mean that we won’t have to wait
