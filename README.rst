@@ -65,7 +65,13 @@ Once this is all set up **by me**, you:
 
 -  Put your **raw unedited**[1] SIBI reports inside ``SIBI_Reports`` (I know, right?)
 
--  Select ``Anaconda Prompt`` from your Windows menu.
+  -  Method 1:
+
+    -  Select ``Anaconda Prompt`` from your Windows menu.
+
+  -  Method 2:
+
+    -  Double click on the file named ``Check_Prerequisites.py``.
 
 -  Watch the text go by until it tells you that it's done.
 
@@ -80,7 +86,7 @@ This won’t complete the process, I will have to:
    -  ``execute pip install -e .`` in the root directory for the prerequisite package.
 -  Run the Jupyter notebook and configure to your settings
 -  Save the script and notebook to a better location.
--  Edit the ``ipython`` lines out of the script file. 
+-  Edit the ``ipython`` lines out of the script file.
 -  Edit ``activate.bat`` in the folder
    ``C:\Users\(username)\AppData\Local\Continuum\anaconda3\Scripts``
    and add the line
