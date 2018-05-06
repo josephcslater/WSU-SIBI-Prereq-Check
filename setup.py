@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""Reduce SIBI student prerequisite status reports to useful reports."""
 
 # from distutils.core import setup
 import os
@@ -30,15 +30,14 @@ setup(name='prereqcheck',
       version=version,
       description='Wright State prerequisite checking',
       author='Joseph C. Slater',
-      author_email='joseph.c.slater@gmail.com',
+      author_email='joseph.slater@wright.edu',
       url='https://github.com/josephcslater/WSU-SIBI-Prereq-Check',
       download_url='https://github.com/josephcslater/WSU-SIBI-Prereq-Check',
       packages=['prereqcheck'],
       package_data={'prereqcheck': ['../README.rst'], '': ['README.rst']},
       long_description=read('README.rst'),
       keywords=[''],
-      install_requires=['pandas'],
-      setup_requires=['pytest-runner'],
+      install_requires=['jupyter_contrib_nbextensions'],
       )
 
 # https://docs.python.org/3/distutils/setupscript.html#additional-meta-data
