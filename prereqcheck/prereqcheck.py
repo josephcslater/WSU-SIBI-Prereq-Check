@@ -619,7 +619,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
     print('=======================================================')
     print('Start report for:')
     print('Course number {}'.format(course_name))
-    print('Section number {}'.format(data["CourseSectionNumber"].iloc[1][:-1]))
+    print('Section number {}'.format(data["CourseSectionNumber"].iloc[1][:]))
     print('Prerequisites are')
     print(prereqs)
     print('=======================================================\n\n')
@@ -642,7 +642,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 
             logging.debug(student)
             logging.debug('Section number {}'.format(
-                data["CourseSectionNumber"].loc[student][:-1]))
+                data["CourseSectionNumber"].loc[student][:]))
 
             # print(student)
             logging.debug('Name: {}'.format(
@@ -718,7 +718,7 @@ def read_prereq_report(filename):
                          sheet_name=0, converters={'PhoneNumber': str})
     Course_Name = data["CourseGrade"].iloc[1]
     Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
-    Section_Number = data["CourseSectionNumber"].iloc[1][:-1]
+    Section_Number = data["CourseSectionNumber"].iloc[1][:]
     print('Course {}, section {}.'.format(Course_Name, Section_Number))
     print('*****************')
     num_prereqs = 0
