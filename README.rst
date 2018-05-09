@@ -28,17 +28,23 @@ You need to:
 
    For example, the Excel file ``prerequisites.xlsx`` contains the following:
 
-   +---------+---------+--------+
-   | ME2120  | ME2120  | ME3120 |
-   +=========+=========+========+
-   | EGR1010 | MTH1234 | ME2120 |
-   +---------+---------+--------+
-   | ME1040  |         |        |
-   +---------+---------+--------+
+   +---------+---------+--------+----------+
+   | ME2120  | ME2120  | ME3120 | ME4321   |
+   +=========+=========+========+==========+
+   | EGR1010 | MTH1234 | ME2120 | ME3210-C |
+   +---------+---------+--------+----------+
+   | ME1040  |         |        |          |
+   +---------+---------+--------+----------+
 
-   This means that there are two ways to satisfy the prerequisites for
-   ME2120 (**no space allowed**): Either MTH234 or (ME1040 and EGR1010).
-   There is one way to satisfy the prerequisites for ME3120: ME2120.
+   This means that:
+
+      -  there are two ways to satisfy the prerequisites for ME2120 (**no space allowed**):
+        -  Either MTH234
+        -  or (ME1040 and EGR1010).
+      -  there is one way to satisfy the prerequisites for ME3120: ME2120.
+      -  there is one way to satisfy the prerequisites for ME4321: a C grade or higher in ME3210
+
+
 5. Create a transfer spreadsheet
 
    -  This is useful for
