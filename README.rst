@@ -43,6 +43,7 @@ You need to:
         -  or (ME1040 and EGR1010).
       -  there is one way to satisfy the prerequisites for ME3120: ME2120.
       -  there is one way to satisfy the prerequisites for ME4321: a C grade or higher in ME3210
+      
 
 
 5. Create a transfer spreadsheet

@@ -716,8 +716,9 @@ def read_prereq_report(filename):
     """Read SIBI report file."""
     data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
                          sheet_name=0, converters={'PhoneNumber': str})
-    Course_Name = data["CourseGrade"].iloc[1]
-    Course_Name = data["CourseGrade"].iloc[1][:Course_Name.find('-')]
+    #  Course_Name = data["CourseGrade"].iloc[1]
+    #  course_name pulled from first row instead of second. 
+    Course_Name = data["CourseGrade"].iloc[0][:Course_Name.find('-')]
     Section_Number = data["CourseSectionNumber"].iloc[1][:]
     print('Course {}, section {}.'.format(Course_Name, Section_Number))
     print('*****************')
