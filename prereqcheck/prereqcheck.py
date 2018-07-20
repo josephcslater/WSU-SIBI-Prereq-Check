@@ -1066,7 +1066,7 @@ def check_prerequisites(prereqfilename=None,
     for file in directory_list:
         # print(file[-2:])
         # cwd = os.getcwd()
-        if ".py" in file:
+        if ".py" in file or file[0] == '.':
             # print(file[-2:])
             logging.debug('\n')
             # print("Ignoring {}".format(file))
