@@ -721,7 +721,6 @@ def read_prereq_report(filename):
     # course_name pulled from first row instead of second.
     # course_name = data["CourseGrade"].iloc[0][:course_name.find('-')]
 
-
     Section_Number = data["CourseSectionNumber"].iloc[1][:]
     print('Course {}, section {}.'.format(course_name, Section_Number))
     print('*****************')
@@ -968,7 +967,7 @@ def check_report(filename,
     # print(data)
 
 #   Create Dayton Sheet
-    data_Dayton = data[data['CourseSectionNumber'].str.contains('W') == False]
+    data_Dayton = data[data['CourseSectionNumber'].str.contains('W') is False]
     email_list = ''
     # for email in data_Dayton['EmailAddress']:
     for index, row in data_Dayton.iterrows():
@@ -992,7 +991,7 @@ def check_report(filename,
 
 
 #   Create Lake Sheet
-    data_Lake = data[data['CourseSectionNumber'].str.contains('W') == True]
+    data_Lake = data[data['CourseSectionNumber'].str.contains('W') is True]
     email_list = ''
     # for email in data_Lake['EmailAddress']:
     for index, row in data_Lake.iterrows():
