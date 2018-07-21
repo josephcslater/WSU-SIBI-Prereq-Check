@@ -54,7 +54,7 @@ transfer_filename = "/Users/jslater/Documents/OneDrive - Wright State University
 # print('capstone design')
 # print('ME 1040 and ME 3600 and MTH 2320 and PHY 2410 and PHY 2410L and ((ME 3210 and ME 3310 and ME 3360 and ME 4140) or (ME 3760 and ME 4620 (ME 4620 (with concurrency) and ME 4720))')
 
-try:
+"""try:
     from prereqcheck.local_prereq_config import *
     print('Prerequisites defined in {}'.format(prereqfilename))
 except ModuleNotFoundError:
@@ -62,7 +62,7 @@ except ModuleNotFoundError:
     print('Local configuration file local_prereq_config.py not found.')
     print('This file should be located in the module code directory.')
     print('It is not necessary if running with a configured jupyter notebook.')
-
+"""
 
 def _load_prerequisites(prereqfilename='prerequisites.xlsx'):
     """Load prerequisite definitions for all program courses."""
@@ -717,11 +717,13 @@ def read_prereq_report(filename):
     print('\n Reading ', filename, '\n')
     data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
                          sheet_name=0, converters={'PhoneNumber': str})
-    #  Course_Name = data["CourseGrade"].iloc[1]
-    #  course_name pulled from first row instead of second.
-    Course_Name = data["CourseGrade"].iloc[0][:Course_Name.find('-')]
+    course_name = data["CourseGrade"].iloc[0]
+    # course_name pulled from first row instead of second.
+    # course_name = data["CourseGrade"].iloc[0][:course_name.find('-')]
+
+
     Section_Number = data["CourseSectionNumber"].iloc[1][:]
-    print('Course {}, section {}.'.format(Course_Name, Section_Number))
+    print('Course {}, section {}.'.format(course_name, Section_Number))
     print('*****************')
     num_prereqs = 0
     keep_cols = ['Name', 'EmailAddress', 'PhoneNumber', 'ProgramDescription',
@@ -763,7 +765,7 @@ def read_prereq_report(filename):
         all_preqs.append(pre_reqs_taken)
     data['Pre_req_dic'] = all_preqs
 
-    return data, student_list, Course_Name, Section_Number
+    return data, student_list, course_name, Section_Number
 
 
 def prereq_list(prereqdict=None):  # = prereqdict):
