@@ -968,6 +968,7 @@ def check_report(filename,
     # print(data)
 
 #   Create Dayton Sheet
+    print(data['CourseSectionNumber'].str.contains('W'))
     data_Dayton = data[data['CourseSectionNumber'].str.contains('W') is False]
     email_list = ''
     # for email in data_Dayton['EmailAddress']:
