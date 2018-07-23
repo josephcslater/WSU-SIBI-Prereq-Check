@@ -719,7 +719,7 @@ def read_prereq_report(filename):
                          sheet_name=0, converters={'PhoneNumber': str})
     course_name = data["CourseGrade"].iloc[0]
     # course_name pulled from first row instead of second.
-    # course_name = data["CourseGrade"].iloc[0][:course_name.find('-')]
+    course_name = course_name[:course_name.find('-')]
 
     Section_Number = data["CourseSectionNumber"].iloc[1][:]
     print('Course {}, section {}.'.format(course_name, Section_Number))
