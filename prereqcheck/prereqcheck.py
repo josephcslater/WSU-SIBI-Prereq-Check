@@ -7,6 +7,7 @@ import sys
 import os
 import collections
 import logging
+import numpy as np
 
 # logging.basicConfig(level=logging.WARNING)
 # logging.basicConfig(level=logging.DEBUG)
@@ -715,7 +716,7 @@ def check_class(course_name, student_list, data, prereqs, no_transfer_data):
 def read_prereq_report(filename):
     """Read SIBI report file."""
     print('\n Reading ', filename, '\n')
-    data = pd.read_excel(filename, header=11, index_col=3, skip_footer=1,
+    data = pd.read_excel(filename, header=11, index_col=3, skipfooter=1,
                          sheet_name=0, converters={'PhoneNumber': str})
     course_name = data["CourseGrade"].iloc[0]
     # course_name pulled from first row instead of second.
@@ -807,7 +808,7 @@ def append_transfer(data, student_list, transfer_filename):
     filename = transfer_filename
     while True:
         try:
-            transfer_data = pd.read_excel(filename, index_col=0, skip_footer=1)
+            transfer_data = pd.read_excel(filename, index_col=0, skipfooter=1)
             break
         except IOError:
             print("Oops!  Cannot find {}".format(filename))
@@ -819,7 +820,7 @@ def append_transfer(data, student_list, transfer_filename):
     logging.debug(
         '*****************************************************************************\n\n')
 
-    transfer_data = pd.read_excel(filename, index_col=0, skip_footer=1)
+    transfer_data = pd.read_excel(filename, index_col=0, skipfooter=1)
     all_preqs = []
     pre_reqs_taken = {}
     no_transfer_data = []
@@ -901,7 +902,7 @@ def check_report(filename,
 
         if Pre_reqs is False and Majors_good is False:
             frames = [data1, data2]
-            data = pd.concat(frames)
+            data = pd.concat(frames, sort=True)
         elif Pre_reqs:
             data = data1
         elif Majors_good:
@@ -968,10 +969,21 @@ def check_report(filename,
     # print(data)
 
 #   Create Dayton Sheet
-    print(data['CourseSectionNumber'].str.contains('W'))
-    print(data['CourseSectionNumber'].str.contains('W').bool())
-    data_Dayton = data[not data['CourseSectionNumber'].str.contains('W').bool()]
-    # data_Dayton = data[data['CourseSectionNumber'].str.contains('W') is False]
+    tr_data = data[0:-1]
+    """print(data[0:-1])
+    print(data['CourseSectionNumber'].str.contains('W')
+          and data['ID'].str.contins('E List')) 
+    print(data[np.isnan(data['CourseSectionNumber'])])
+    print('notted')
+    print(not data['CourseSectionNumber'].str.contains('W'))
+    is_Dayton = (data['CourseSectionNumber'].str.contains('W') and
+          not np.isnan(data['CourseSectionNumber']))
+    data_Dayton = data[is_Dayton]"""
+    #print(tr_data['CourseSectionNumber'].str.contains('W'))
+    #print(tr_data['CourseSectionNumber'].str.contains('W') is False)
+    #print('Falses above')
+    #print(tr_data[~tr_data['CourseSectionNumber'].str.contains('W')])
+    data_Dayton = tr_data[~tr_data['CourseSectionNumber'].str.contains('W')]
     email_list = ''
     # for email in data_Dayton['EmailAddress']:
     for index, row in data_Dayton.iterrows():
@@ -993,9 +1005,8 @@ def check_report(filename,
     data_Dayton.at['E List', 'Name'] = email_list
     data_Dayton.to_excel(writer, sheet_name='Dayton Campus')
 
-
 #   Create Lake Sheet
-    data_Lake = data[data['CourseSectionNumber'].str.contains('W') is True]
+    data_Lake = tr_data[tr_data['CourseSectionNumber'].str.contains('W')]
     email_list = ''
     # for email in data_Lake['EmailAddress']:
     for index, row in data_Lake.iterrows():
