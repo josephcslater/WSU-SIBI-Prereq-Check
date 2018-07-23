@@ -101,3 +101,4 @@ ENV/
 .idea/workspace.xml
 .DS_Store
 JupyterNotebooks/PreReq_aug_15.ipynb
+prereqcheck/.vscode/settings.json
