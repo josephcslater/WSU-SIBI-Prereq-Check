@@ -873,7 +873,7 @@ def check_report(filename,
     # print(data)
     file_path = filename[:filename.rfind('/') + 1]
     logging.debug(file_path)
-    print(prereqdict)
+    print(course_name)
     prereqs = prereqdict[course_name]
     data, no_transfer_data = append_transfer(data,
                                              student_list,
