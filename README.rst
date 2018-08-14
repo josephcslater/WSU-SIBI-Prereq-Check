@@ -93,9 +93,11 @@ This won’t complete the process, I will have to:
 -  Run the Jupyter notebook and configure to your settings
 -  Save the script and notebook to a better location.
 -  Edit the ``ipython`` lines out of the script file.
--  Edit ``activate.bat`` in the folder (Sometimes located elsewhere- run anaconda prompt and it will briefly show at the top of the window)::
+-  Edit ``activate.bat`` in the folder (Sometimes located elsewhere- run anaconda prompt and it will briefly show at the top of the window)
+
    ``C:\Users\(username)\AppData\Local\Continuum\anaconda3\Scripts``
    and add the line
+   
    ``python (pathto)Check_Prerequisites.py``.
 -  Demonstrate how to use it.
 
