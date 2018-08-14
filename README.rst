@@ -88,13 +88,12 @@ This won’t complete the process, I will have to:
 ------------------------------------------------
 
 -  Install the WSU-SIBI package
-   -  Run the ``Anaconda Prompt`` (now on your windows start menu, in
-      the ``Anaconda3`` folder)
+   -  Run the ``Anaconda Prompt`` (now on your windows start menu, in the ``Anaconda3`` folder)
    -  ``execute pip install -e .`` in the root directory for the prerequisite package.
 -  Run the Jupyter notebook and configure to your settings
 -  Save the script and notebook to a better location.
 -  Edit the ``ipython`` lines out of the script file.
--  Edit ``activate.bat`` in the folder (Sometimes located elsewhere- run anaconda prompt and it will briefly show at the top of the window)
+-  Edit ``activate.bat`` in the folder (Sometimes located elsewhere- run anaconda prompt and it will briefly show at the top of the window)::
    ``C:\Users\(username)\AppData\Local\Continuum\anaconda3\Scripts``
    and add the line
    ``python (pathto)Check_Prerequisites.py``.
