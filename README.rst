@@ -6,7 +6,7 @@ You need to:
 
 1. Install the `github app <https://desktop.github.com/>`__.
 
-   -  You don’t need to make an account (anymore). **Please don't**
+   -  You don’t need to make an account (anymore). **Please don't**. (regular github users are fine- but adding an account for those who aren't will just create more confusion)
 
 3. `Install Python <https://www.anaconda.com/download/>`__
 
